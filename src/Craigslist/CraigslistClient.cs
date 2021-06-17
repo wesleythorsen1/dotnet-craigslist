@@ -50,7 +50,7 @@ namespace Craigslist
 
             using var content = response.Content.ReadAsStream();
 
-            return _pageParser.ParseListing(content);
+            return _pageParser.ParseListing(request, content);
         }
 
         public async Task<CraigslistListingDetails> GetListingAsync(CraigslistListingRequest request, CancellationToken cancellationToken = default)
@@ -61,7 +61,7 @@ namespace Craigslist
 
             using var content = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-            return _pageParser.ParseListing(content);
+            return _pageParser.ParseListing(request, content);
         }
 
         public async IAsyncEnumerable<CraigslistListingDetails> GetListingDetailsAsync(CraigslistSearchRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -90,7 +90,7 @@ namespace Craigslist
 
             using var content = response.Content.ReadAsStream();
 
-            return _pageParser.ParseSearchResults(content);
+            return _pageParser.ParseSearchResults(request, content);
         }
 
         public async Task<CraigslistSearchResults> SearchAsync(CraigslistSearchRequest request, CancellationToken cancellationToken = default)
@@ -101,7 +101,7 @@ namespace Craigslist
 
             using var content = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-            return _pageParser.ParseSearchResults(content);
+            return _pageParser.ParseSearchResults(request, content);
         }
     }
 }

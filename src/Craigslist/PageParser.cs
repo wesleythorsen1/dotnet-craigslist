@@ -13,20 +13,20 @@ namespace Craigslist
 {
     internal interface IPageParser
     {
-        CraigslistSearchResults ParseSearchResults(Stream content);
-        CraigslistListingDetails ParseListing(Stream content);
+        CraigslistSearchResults ParseSearchResults(CraigslistSearchRequest request, Stream content);
+        CraigslistListingDetails ParseListing(CraigslistListingRequest request, Stream content);
     }
 
     internal class PageParser : IPageParser
     {
-        public CraigslistSearchResults ParseSearchResults(Stream content)
+        public CraigslistSearchResults ParseSearchResults(CraigslistSearchRequest request, Stream content)
         {
             var doc = new HtmlDocument();
             doc.Load(content);
             throw new NotImplementedException();
         }
 
-        public CraigslistListingDetails ParseListing(Stream content)
+        public CraigslistListingDetails ParseListing(CraigslistListingRequest request, Stream content)
         {
             var doc = new HtmlDocument();
             doc.Load(content);

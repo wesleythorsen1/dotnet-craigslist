@@ -5,20 +5,20 @@ namespace Craigslist
 {
     public class CraigslistSearchResults
     {
-        public CraigslistSearchResults(string url) => 
-            Url = url;
+        internal CraigslistSearchResults(CraigslistSearchRequest request) => 
+            Request = request;
 
-        public string Url { get; }
+        public CraigslistSearchRequest Request { get; set; }
 
         public List<CraigslistListing> Listings { get; set; } = new List<CraigslistListing>();
     }
 
     public class CraigslistListing
     {
-        public CraigslistListing(string id, string listingUrl, DateTime date, string title)
+        internal CraigslistListing(string id, string listingUrl, DateTime date, string title)
             : this(id, listingUrl, date, title, default, default) { }
 
-        public CraigslistListing(string id, string listingUrl, DateTime date, string title, string? price, string? hood) => 
+        internal CraigslistListing(string id, string listingUrl, DateTime date, string title, string? price, string? hood) => 
             (Id, ListingUrl, Date, Title, Price, Hood) = 
             (id, listingUrl, date, title, price, hood);
 
@@ -37,16 +37,18 @@ namespace Craigslist
 
     public class CraigslistListingDetails
     {
-        public CraigslistListingDetails(string id, string listingUrl, DateTime date, string title)
-            : this(id, listingUrl, date, title, default, default) { }
+        internal CraigslistListingDetails(CraigslistListingRequest request, DateTime date, string title)
+            : this(request, date, title, default, default) { }
 
-        public CraigslistListingDetails(string id, string listingUrl, DateTime date, string title, string? price, string? description) => 
-            (Id, ListingUrl, Date, Title, Price, Description) = 
-            (id, listingUrl, date, title, price, description);
+        internal CraigslistListingDetails(CraigslistListingRequest request, DateTime date, string title, string? price, string? description) => 
+            (Request, Date, Title, Price, Description) = 
+            (request, date, title, price, description);
 
-        public string Id { get; }
+        public CraigslistListingRequest Request { get; set; }
 
-        public string ListingUrl { get; }
+        public string Id => Request.Id;
+
+        public string ListingUrl => Request.Uri.ToString();
 
         public DateTime Date { get; }
 
@@ -61,7 +63,7 @@ namespace Craigslist
 
     public class CraigslistCrawlResults
     {
-        public CraigslistCrawlResults(string url) => 
+        internal CraigslistCrawlResults(string url) => 
             Url = url;
 
         public string Url { get; set; }
