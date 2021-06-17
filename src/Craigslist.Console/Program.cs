@@ -5,10 +5,10 @@ namespace Craigslist.Console
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            var request = new CraigslistRequest("seattle", "see", "hhh");
-            request.SearchText = "loft";
+            var request = new CraigslistHousingRentalRequest("seattle", "see");
+            request.SearchText = "loft + view";
 
             var uri = request.Uri;
             var uirStr = uri.ToString();

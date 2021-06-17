@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Craigslist.Console/bin/Debug/net5.0/Craigslist.Console.dll",
+            "program": "${workspaceFolder}/src/Craigslist.Console/bin/Debug/net5.0/Craigslist.Console.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Craigslist.Console",
+            "cwd": "${workspaceFolder}/src/Craigslist.Console",
             "console": "internalConsole",
             "stopAtEntry": false
         },

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-#nullable enable
-
 namespace Craigslist
 {
     public class CraigslistRequest
@@ -16,17 +14,13 @@ namespace Craigslist
 
         public string? SearchText
         {
-            get => GetParameter(QP_QUERY);
+            get => GetParameter<string>(QP_QUERY);
             set => SetParameter(QP_QUERY, value);
         }
         
-        // public string BaseUrl => Area == default ?
-        //     $"http://{Site}.craigslist.org/search/{Category}" :
-        //     $"http://{Site}.craigslist.org/search/{Area}/{Category}";
-
         public Uri Uri => CreateRequestUrl();
 
-        private IDictionary<string, string> _queryParameters;
+        private IDictionary<string, object> _queryParameters;
 
         public CraigslistRequest(string site, string category)
             : this(site, default, category)
@@ -34,11 +28,11 @@ namespace Craigslist
         }
 
         public CraigslistRequest(string site, string? area, string category)
-            : this(site, area, category, new Dictionary<string, string>())
+            : this(site, area, category, new Dictionary<string, object>())
         {
         }
 
-        internal CraigslistRequest(string site, string? area, string category, IDictionary<string, string> parameterStore)
+        internal CraigslistRequest(string site, string? area, string category, IDictionary<string, object> parameterStore)
         {
             Site = site ?? throw new ArgumentNullException(nameof(site));
             Category = category ?? throw new ArgumentNullException(nameof(category));
@@ -47,21 +41,22 @@ namespace Craigslist
             _queryParameters = parameterStore;
         }
 
-        protected void SetParameter(string key, object? value)
+        protected void SetParameter<T>(string key, T value)
         {
-            if (value == default)
+            if (EqualityComparer<T>.Default.Equals(value, default(T)) || value == null)
             {
                 _queryParameters.Remove(key);
                 return;
             }
-            _queryParameters[key] = value.ToString();
+            
+            _queryParameters[key] = value;
         }
 
-        protected string? GetParameter(string key)
+        protected T? GetParameter<T>(string key)
         {
-            if (_queryParameters.TryGetValue(QP_QUERY, out var value))
+            if (_queryParameters.TryGetValue(key, out var value))
             {
-                return value;
+                return (T)value;
             }
             return default;
         }
@@ -83,7 +78,7 @@ namespace Craigslist
                 builder.Path = $"search/{Area}/{Category}";
             }
 
-            builder.Query = string.Join('&', _queryParameters.Select(kvp => $"{kvp.Key}={Uri.EscapeUriString(kvp.Value)}"));
+            builder.Query = string.Join('&', _queryParameters.Select(kvp => $"{kvp.Key}={Uri.EscapeUriString(kvp.Value.ToString() ?? "")}"));
 
             return builder.Uri;
         }
