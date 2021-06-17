@@ -1,17 +1,28 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Craigslist.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var request = new CraigslistHousingRentalRequest("seattle", "see");
-            request.SearchText = "loft + view";
+            var request = new CraigslistSearchRequest("seattle", "see", "apa")
+            {
+                SearchText = "loft",
+                PostedToday = true
+            };
+            
+            var client = new CraigslistClient();
+            var results = await client.SearchAsync(request);
 
-            var uri = request.Uri;
-            var uirStr = uri.ToString();
+            var listingRequests = results.Listings.Select(l => new CraigslistListingRequest(l.ListingUrl));
+
+            await foreach (var listingDetail in client.GetListingDetailsAsync(listingRequests))
+            {
+
+            }
         }
     }
 }
