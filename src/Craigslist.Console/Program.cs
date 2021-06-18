@@ -13,16 +13,12 @@ namespace Craigslist.Console
                 SearchText = "loft",
                 PostedToday = true
             };
-            
+
             var client = new CraigslistClient();
             var results = await client.SearchAsync(request);
 
             var listingRequests = results.Listings.Select(l => new CraigslistListingRequest(l.ListingUrl));
 
-            await foreach (var listingDetail in client.GetListingDetailsAsync(listingRequests))
-            {
-
-            }
         }
     }
 }

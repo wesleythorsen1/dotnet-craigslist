@@ -10,7 +10,7 @@ namespace Craigslist
         private const string QP_BUNDLEDUPLICATES = "bundleDuplicates";
         private const string QP_SEARCHNEARBY = "searchNearby";
         
-        public int? Skip
+        public int Skip
         {
             get => GetParameter<int>(QP_SKIP);
             set => SetParameter(QP_SKIP, value);

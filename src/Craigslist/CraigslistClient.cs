@@ -12,8 +12,6 @@ namespace Craigslist
         Task<CraigslistSearchResults> SearchAsync(CraigslistSearchRequest request, CancellationToken cancellationToken = default);
         CraigslistListingDetails GetListing(CraigslistListingRequest request);
         Task<CraigslistListingDetails> GetListingAsync(CraigslistListingRequest request, CancellationToken cancellationToken = default);
-        IAsyncEnumerable<CraigslistListingDetails> GetListingDetailsAsync(CraigslistSearchRequest request, CancellationToken cancellationToken = default);
-        IAsyncEnumerable<CraigslistListingDetails> GetListingDetailsAsync(IEnumerable<CraigslistListingRequest> listings, CancellationToken cancellationToken = default);
     }
 
     public class CraigslistClient : ICraigslistClient
@@ -62,24 +60,6 @@ namespace Craigslist
             using var content = await response.Content.ReadAsStreamAsync(cancellationToken);
 
             return _pageParser.ParseListing(request, content);
-        }
-
-        public async IAsyncEnumerable<CraigslistListingDetails> GetListingDetailsAsync(CraigslistSearchRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-        {
-            var searchResults = await SearchAsync(request);
-            foreach (var listing in searchResults.Listings)
-            {
-                var listingRequest = new CraigslistListingRequest(listing.ListingUrl);
-                yield return await GetListingAsync(listingRequest);
-            }
-        }
-
-        public async IAsyncEnumerable<CraigslistListingDetails> GetListingDetailsAsync(IEnumerable<CraigslistListingRequest> listingRequests, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-        {
-            foreach (var request in listingRequests)
-            {
-                yield return await GetListingAsync(request);
-            }
         }
 
         public CraigslistSearchResults Search(CraigslistSearchRequest request)
