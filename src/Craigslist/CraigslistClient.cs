@@ -48,7 +48,7 @@ namespace Craigslist
 
             using var content = response.Content.ReadAsStream();
 
-            return _pageParser.ParseListing(request, content);
+            return _pageParser.ParseListingDetails(request, content);
         }
 
         public async Task<CraigslistListingDetails> GetListingAsync(CraigslistListingRequest request, CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ namespace Craigslist
 
             using var content = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-            return _pageParser.ParseListing(request, content);
+            return _pageParser.ParseListingDetails(request, content);
         }
 
         public CraigslistSearchResults Search(CraigslistSearchRequest request)

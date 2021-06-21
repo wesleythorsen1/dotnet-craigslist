@@ -8,7 +8,7 @@ namespace Craigslist
     public partial class CraigslistSearchRequest
     {
         private static readonly Regex _urlRegex = 
-            new Regex(@"https?\://(\w+)\.craigslist\.org/search/(\w{3})(/(\w{3}))?(\?(\S*))", RegexOptions.Compiled);
+            new Regex(@"https?\://(\w+)\.craigslist\.org/search/(\w{3})(/(\w{3}))?(\?(\S*))?", RegexOptions.Compiled);
 
         public string Site { get; set; }
         public string? Area { get; set; }
@@ -39,11 +39,18 @@ namespace Craigslist
                 Area = match.Groups[2].Value;
                 Category = match.Groups[4].Value;
             }
-            
-            _queryParameters = match.Groups[6].Value
-                .Split('&')
-                .Select(p => p.Split('='))
-                .ToDictionary(p => p[0], p => (object)p[1]);
+
+            if (match.Groups[6].Success)
+            {
+                _queryParameters = match.Groups[6].Value
+                    .Split('&')
+                    .Select(p => p.Split('='))
+                    .ToDictionary(p => p[0], p => (object)p[1]);
+            }
+            else
+            {
+                _queryParameters = new Dictionary<string, object>();
+            }
         }
 
         public CraigslistSearchRequest(string site, string category)

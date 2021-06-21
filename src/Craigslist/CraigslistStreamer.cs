@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,8 +27,7 @@ namespace Craigslist
         public async IAsyncEnumerable<CraigslistListingDetails> StreamListingDetails(
             CraigslistSearchRequest request, 
             TimeSpan refreshInterval, 
-            [EnumeratorCancellation] 
-            CancellationToken cancellationToken = default)
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -50,8 +50,7 @@ namespace Craigslist
         public async IAsyncEnumerable<CraigslistListing> StreamListings(
             CraigslistSearchRequest request, 
             TimeSpan refreshInterval, 
-            [EnumeratorCancellation] 
-            CancellationToken cancellationToken = default)
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -90,7 +89,7 @@ namespace Craigslist
                     yield return listing;
                 }
 
-                if (endOfResults || searchResults.Listings.Count < 120)
+                if (endOfResults || searchResults.Listings.Count() < 120)
                 {
                     // no more results
                     break;

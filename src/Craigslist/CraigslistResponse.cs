@@ -10,7 +10,7 @@ namespace Craigslist
 
         public CraigslistSearchRequest Request { get; set; }
 
-        public List<CraigslistListing> Listings { get; set; } = new List<CraigslistListing>();
+        public IEnumerable<CraigslistListing> Listings { get; set; } = new List<CraigslistListing>();
     }
 
     public class CraigslistListing
@@ -68,8 +68,8 @@ namespace Craigslist
 
         public string Url { get; set; }
 
-        public List<CraigslistSearchResults> SearchResultPages { get; set; } = new List<CraigslistSearchResults>();
+        public IEnumerable<CraigslistSearchResults> SearchResultPages { get; set; } = new List<CraigslistSearchResults>();
 
-        public List<CraigslistListingDetails> ListingDetails { get; set; } = new List<CraigslistListingDetails>();
+        public IEnumerable<CraigslistListingDetails> ListingDetails { get; set; } = new List<CraigslistListingDetails>();
     }
 }

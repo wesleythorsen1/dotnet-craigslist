@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craigslist", "Craigslist\Cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craigslist.Console", "Craigslist.Console\Craigslist.Console.csproj", "{B628FFD0-616E-4CE1-8CE2-99450E2B3841}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Craigslist.UnitTests", "Craigslist.UnitTests\Craigslist.UnitTests.csproj", "{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{B628FFD0-616E-4CE1-8CE2-99450E2B3841}.Release|x64.Build.0 = Release|Any CPU
 		{B628FFD0-616E-4CE1-8CE2-99450E2B3841}.Release|x86.ActiveCfg = Release|Any CPU
 		{B628FFD0-616E-4CE1-8CE2-99450E2B3841}.Release|x86.Build.0 = Release|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Debug|x64.Build.0 = Debug|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Debug|x86.Build.0 = Debug|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Release|x64.ActiveCfg = Release|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Release|x64.Build.0 = Release|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Release|x86.ActiveCfg = Release|Any CPU
+		{F945E09A-1C8B-4A3F-9ECE-3599B0AB1BF2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
