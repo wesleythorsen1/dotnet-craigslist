@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Craigslist.Console
@@ -8,16 +10,16 @@ namespace Craigslist.Console
     {
         static async Task Main(string[] args)
         {
-            var request = new CraigslistSearchRequest("seattle", "see", "apa")
+            using var httpClient = new HttpClient();
+            var client = new CraigslistClient(httpClient);
+
+            var request = new CraigslistHousingRentalRequest("seattle")
             {
                 SearchText = "loft",
                 PostedToday = true
             };
 
-            var client = new CraigslistClient();
             var results = await client.SearchAsync(request);
-
-            var listingRequests = results.Listings.Select(l => new CraigslistListingRequest(l.ListingUrl));
 
         }
     }

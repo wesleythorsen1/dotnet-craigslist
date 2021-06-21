@@ -40,7 +40,7 @@ namespace Craigslist
         {
             var id = row.Attributes["data-pid"].Value;
             var link = row.SelectSingleNode(".//a[contains(@class, 'hdrlnk')]");
-            var title = HttpUtility.UrlDecode(link.InnerText);
+            var title = HttpUtility.HtmlDecode(link.InnerText);
             var url = link.Attributes["href"].Value;
             var time = row.SelectSingleNode(".//time");
 
@@ -60,7 +60,7 @@ namespace Craigslist
             }
 
             var price = row.SelectSingleNode(".//span[contains(@class, 'result-price')]")?.InnerText;
-            var hood = row.SelectSingleNode(".//span[contains(@class, 'result-hood')]")?.InnerText?.Trim('(', ')');
+            var hood = row.SelectSingleNode(".//span[contains(@class, 'result-hood')]")?.InnerText?.Trim(' ', '(', ')');
 
             return new CraigslistListing(id, url, dateTime, title, price, hood);
         }

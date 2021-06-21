@@ -16,7 +16,6 @@ namespace Craigslist
 
     public class CraigslistClient : ICraigslistClient
     {
-        /// Only set once, when user does not provide an HttpClient
         private static HttpClient? _staticHttpClient;
         private readonly HttpClient _httpClient;
         private readonly IPageParser _pageParser;
