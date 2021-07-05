@@ -34,10 +34,7 @@ namespace Craigslist
             : this(httpClient, new PageParser()) { }
 
         internal CraigslistClient(HttpClient httpClient, IPageParser pageParser)
-        {
-            _httpClient = httpClient;
-            _pageParser = pageParser;
-        }
+            => (_httpClient, _pageParser) = (httpClient, pageParser);
 
         public CraigslistListingDetails GetListing(CraigslistListingRequest request)
         {
