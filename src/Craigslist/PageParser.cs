@@ -23,8 +23,14 @@ namespace Craigslist
                 .SelectSingleNode("//ul[contains(@class, 'rows')]")
                 .SelectNodes(".//li[contains(@class, 'result-row')]");
 
+            var next = doc.DocumentNode
+                .SelectSingleNode("//head/link[contains(@rel, 'next')]")
+                ?.Attributes["href"]
+                ?.Value;
+                
             return new CraigslistSearchResults(request)
             {
+                Next = next,
                 Listings = rows.Select(r => ParseRow(r)).ToList(),
             };
         }
