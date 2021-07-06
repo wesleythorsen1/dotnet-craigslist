@@ -25,27 +25,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ContentWithTargetPath Include="data/search_sss_1.html">
+    <ContentWithTargetPath Include="data/search_results_1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>search_sss_1.html</TargetPath>
+      <TargetPath>search_results_1.html</TargetPath>
     </ContentWithTargetPath>
-    <None Include="data/search_sss_1.html" />
+    <None Include="data/search_results_1.html" />
   </ItemGroup>
 
   <ItemGroup>
-    <ContentWithTargetPath Include="data/7339959651.html">
+    <ContentWithTargetPath Include="data/listing_detail_1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>7339959651.html</TargetPath>
+      <TargetPath>listing_detail_1.html</TargetPath>
     </ContentWithTargetPath>
-    <None Include="data/7339959651.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ContentWithTargetPath Include="data/7344465455.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>7344465455.html</TargetPath>
-    </ContentWithTargetPath>
-    <None Include="data/7344465455.html" />
+    <None Include="data/listing_detail_1.html" />
   </ItemGroup>
 
 </Project>

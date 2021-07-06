@@ -21,7 +21,7 @@ namespace Craigslist
             doc.Load(content);
             
             var rows = doc.DocumentNode
-                .SelectSingleNode("//ul[contains(@class, 'rows')]")
+                .SelectSingleNode("//ul[@id='search-results']")
                 .SelectNodes(".//li[contains(@class, 'result-row')]");
 
             var next = doc.DocumentNode
@@ -48,7 +48,7 @@ namespace Craigslist
                 
             var updated = doc.DocumentNode
                 .SelectSingleNode("//div[contains(@class, 'postinginfos')]")
-                ?.SelectNodes(".//p[contains(@class, 'postinginfo reveal')]")
+                ?.SelectNodes(".//p[contains(@class, 'postinginfo')]")
                 ?.SingleOrDefault(n => n.InnerText.Contains("updated:", StringComparison.InvariantCultureIgnoreCase))
                 ?.SelectSingleNode(".//time")
                 ?.Attributes["datetime"]
@@ -129,14 +129,6 @@ namespace Craigslist
             if (time != default)
             {
                 dateTime = DateTime.Parse(time.Attributes["datetime"].Value);
-            }
-            else
-            {
-                var pl = row.SelectSingleNode(".//span[contains(@class, 'pl')]");
-                if (pl != default)
-                {
-                    dateTime = DateTime.Parse(pl.InnerText.Split(':')[0].Trim());
-                }
             }
 
             var price = row.SelectSingleNode(".//span[contains(@class, 'result-price')]")?.InnerText;
