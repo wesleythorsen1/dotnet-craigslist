@@ -40,4 +40,12 @@
     <None Include="data/7339959651.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ContentWithTargetPath Include="data/7344465455.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>7344465455.html</TargetPath>
+    </ContentWithTargetPath>
+    <None Include="data/7344465455.html" />
+  </ItemGroup>
+
 </Project>

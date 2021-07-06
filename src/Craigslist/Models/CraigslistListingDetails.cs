@@ -1,30 +1,36 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Craigslist
 {
     public class CraigslistListingDetails
     {
-        internal CraigslistListingDetails(CraigslistListingRequest request, DateTime date, string title)
-            : this(request, date, title, default, default) { }
+        internal CraigslistListingDetails(CraigslistListingRequest request) => 
+            Request = request;
 
-        internal CraigslistListingDetails(CraigslistListingRequest request, DateTime date, string title, string? price, string? description) => 
-            (Request, Date, Title, Price, Description) = 
-            (request, date, title, price, description);
-
-        public CraigslistListingRequest Request { get; set; }
+        public CraigslistListingRequest Request { get; init; }
 
         public string Id => Request.Id;
 
-        public string ListingUrl => Request.Uri.ToString();
+        public Uri ListingUri => Request.Uri;
 
-        public DateTime Date { get; }
+        public DateTime Posted { get; init; }
 
-        public string Title { get; }
+        public DateTime? Updated { get; init; }
 
-        public string? Price { get; }
+        public string? FullTitle { get; init; }
 
-        public string? Description { get; }
+        public string? Title { get; init; }
 
-        //TODO: Add other attributes
+        public decimal? Price { get; init; }
+
+        public string? PriceText => Price?.ToString("C", CultureInfo.CurrentCulture);
+
+        public string? Description { get; init; }
+
+        public GeoCoordinate? Location { get; init; }
+
+        public IEnumerable<string> AdditionalAttributes { get; init; } = new string[0];
     }
 }
