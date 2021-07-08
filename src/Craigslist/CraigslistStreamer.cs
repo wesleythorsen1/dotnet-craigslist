@@ -76,7 +76,7 @@ namespace Craigslist
                 var searchResults = await _client.SearchAsync(request, cancellationToken);
 
                 var listings = searchResults.Listings
-                    .Where(l => l.Date.ToUniversalTime() >= since)
+                    .Where(l => l.Date.ToUniversalTime() > since)
                     .OrderBy(l => l.Date);
 
                 foreach (var listing in listings)
