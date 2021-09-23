@@ -20,7 +20,7 @@ namespace Craigslist.UnitTests
 
             var result = _sut.ParseSearchResults(request, content);
             
-            Assert.NotEmpty(result.Listings);
+            Assert.NotEmpty(result.Results);
             Assert.NotNull(result.Request);
         }
     }

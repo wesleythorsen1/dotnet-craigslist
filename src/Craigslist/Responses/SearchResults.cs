@@ -11,6 +11,6 @@ namespace Craigslist
 
         public SearchRequest Request { get; set; }
 
-        public IEnumerable<Listing> Listings { get; set; } = new List<Listing>();
+        public IEnumerable<SearchResult> Results { get; set; } = new List<SearchResult>();
     }
 }

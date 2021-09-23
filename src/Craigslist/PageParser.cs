@@ -10,7 +10,7 @@ namespace Craigslist
     internal interface IPageParser
     {
         SearchResults ParseSearchResults(SearchRequest request, Stream content);
-        ListingDetails ParseListingDetails(ListingRequest request, Stream content);
+        Posting ParsePosting(PostingRequest request, Stream content);
     }
 
     internal class PageParser : IPageParser
@@ -32,11 +32,11 @@ namespace Craigslist
             return new SearchResults(request)
             {
                 Next = next,
-                Listings = rows?.Select(r => ParseRow(r)).ToList() ?? Enumerable.Empty<Listing>(),
+                Results = rows?.Select(r => ParseRow(r)).ToList() ?? Enumerable.Empty<SearchResult>(),
             };
         }
 
-        public ListingDetails ParseListingDetails(ListingRequest request, Stream content)
+        public Posting ParsePosting(PostingRequest request, Stream content)
         {
             var doc = new HtmlDocument();
             doc.Load(content);
@@ -103,7 +103,7 @@ namespace Craigslist
                     .Select(t => t.Text)))
                 .ToHashSet();
 
-            return new ListingDetails(request)
+            return new Posting(request)
             {
                 Posted = DateTime.Parse(posted),
                 Updated = updated == default ? default(DateTime?) : DateTime.Parse(updated),
@@ -116,7 +116,7 @@ namespace Craigslist
             };
         }
 
-        private Listing ParseRow(HtmlNode row)
+        private SearchResult ParseRow(HtmlNode row)
         {
             var id = row.Attributes["data-pid"].Value;
             var link = row.SelectSingleNode(".//a[contains(@class, 'hdrlnk')]");
@@ -134,7 +134,7 @@ namespace Craigslist
             var price = row.SelectSingleNode(".//span[contains(@class, 'result-price')]")?.InnerText;
             var hood = row.SelectSingleNode(".//span[contains(@class, 'result-hood')]")?.InnerText?.Trim(' ', '(', ')');
 
-            return new Listing(id, url, dateTime, title, price, hood);
+            return new SearchResult(id, url, dateTime, title, price, hood);
         }
     }
 }

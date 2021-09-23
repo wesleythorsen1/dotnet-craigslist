@@ -8,8 +8,8 @@ namespace Craigslist
     {
         SearchResults Search(SearchRequest request);
         Task<SearchResults> SearchAsync(SearchRequest request, CancellationToken cancellationToken = default);
-        ListingDetails GetListing(ListingRequest request);
-        Task<ListingDetails> GetListingAsync(ListingRequest request, CancellationToken cancellationToken = default);
+        Posting GetPosting(PostingRequest request);
+        Task<Posting> GetPostingAsync(PostingRequest request, CancellationToken cancellationToken = default);
     }
 
     public class CraigslistClient : ICraigslistClient
@@ -56,7 +56,7 @@ namespace Craigslist
             return _pageParser.ParseSearchResults(request, content);
         }
 
-        public ListingDetails GetListing(ListingRequest request)
+        public Posting GetPosting(PostingRequest request)
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, request.Uri);
             using var response = _httpClient.Send(req);
@@ -64,10 +64,10 @@ namespace Craigslist
 
             using var content = response.Content.ReadAsStream();
 
-            return _pageParser.ParseListingDetails(request, content);
+            return _pageParser.ParsePosting(request, content);
         }
 
-        public async Task<ListingDetails> GetListingAsync(ListingRequest request, CancellationToken cancellationToken = default)
+        public async Task<Posting> GetPostingAsync(PostingRequest request, CancellationToken cancellationToken = default)
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, request.Uri);
             using var response = await _httpClient.SendAsync(req, cancellationToken);
@@ -75,7 +75,7 @@ namespace Craigslist
 
             using var content = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-            return _pageParser.ParseListingDetails(request, content);
+            return _pageParser.ParsePosting(request, content);
         }
     }
 }

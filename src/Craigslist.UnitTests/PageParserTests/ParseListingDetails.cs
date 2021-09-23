@@ -16,11 +16,11 @@ namespace Craigslist.UnitTests
         public void Test1()
         {
             // arrange
-            var request = new ListingRequest("https://site.craigslist.org/aaa/apa/123.html");
+            var request = new PostingRequest("https://site.craigslist.org/aaa/apa/123.html");
             var content = new FileStream("listing_detail_1.html", FileMode.Open);
 
             // act
-            var result = _sut.ParseListingDetails(request, content);
+            var result = _sut.ParsePosting(request, content);
 
             // assert
             Assert.NotNull(result);

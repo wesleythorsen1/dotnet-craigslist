@@ -5,8 +5,6 @@ namespace Craigslist
 {
     public class HousingRequest : SearchRequest
     {
-        private const string QP_SEARCHDISTANCE = "search_distance";
-        private const string QP_POSTALCODE = "postal";
         private const string QP_MINPRICE = "min_price";
         private const string QP_MAXPRICE = "max_price";
         private const string QP_MINBEDROOMS = "min_bedrooms";
@@ -104,18 +102,6 @@ namespace Craigslist
             Weekly = 2,
             Monthly = 3,
             Yearly = 4
-        }
-
-        public float SearchDistance
-        {
-            get => GetParameter<float>(QP_SEARCHDISTANCE);
-            set => SetParameter(QP_SEARCHDISTANCE, value);
-        }
-
-        public string? PostalCode
-        {
-            get => GetParameter<string>(QP_POSTALCODE);
-            set => SetParameter(QP_POSTALCODE, value);
         }
 
         public int? MinPrice

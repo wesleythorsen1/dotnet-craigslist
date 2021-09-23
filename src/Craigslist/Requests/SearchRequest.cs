@@ -9,6 +9,8 @@ namespace Craigslist
         private const string QP_POSTEDTODAY = "postedToday";
         private const string QP_BUNDLEDUPLICATES = "bundleDuplicates";
         private const string QP_SEARCHNEARBY = "searchNearby";
+        private const string QP_SEARCHDISTANCE = "search_distance";
+        private const string QP_POSTALCODE = "postal";
         
         public int Skip
         {
@@ -50,6 +52,18 @@ namespace Craigslist
         {
             get => GetParameter<bool>(QP_SEARCHNEARBY);
             set => SetParameter(QP_SEARCHNEARBY, value);
+        }
+
+        public float SearchDistance
+        {
+            get => GetParameter<float>(QP_SEARCHDISTANCE);
+            set => SetParameter(QP_SEARCHDISTANCE, value);
+        }
+
+        public string? PostalCode
+        {
+            get => GetParameter<string>(QP_POSTALCODE);
+            set => SetParameter(QP_POSTALCODE, value);
         }
     }
 }

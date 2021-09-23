@@ -4,16 +4,16 @@ using System.Globalization;
 
 namespace Craigslist
 {
-    public class ListingDetails
+    public class Posting
     {
-        internal ListingDetails(ListingRequest request) => 
+        internal Posting(PostingRequest request) => 
             Request = request;
 
-        public ListingRequest Request { get; init; }
+        public PostingRequest Request { get; init; }
 
         public string Id => Request.Id;
 
-        public Uri ListingUri => Request.Uri;
+        public Uri PostingUri => Request.Uri;
 
         public DateTime Posted { get; init; }
 
