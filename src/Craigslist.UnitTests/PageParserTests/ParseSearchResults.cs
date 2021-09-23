@@ -15,7 +15,7 @@ namespace Craigslist.UnitTests
         [Fact]
         public void CanParseSearchContent()
         {
-            var request = new CraigslistSearchRequest("https://site.craigslist.org/search/area/sss");
+            var request = new SearchRequest("https://site.craigslist.org/search/area/sss");
             var content = new FileStream("search_results_1.html", FileMode.Open);
 
             var result = _sut.ParseSearchResults(request, content);

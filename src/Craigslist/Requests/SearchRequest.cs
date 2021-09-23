@@ -1,6 +1,6 @@
 namespace Craigslist
 {
-    public partial class CraigslistSearchRequest
+    public partial class SearchRequest
     {
         private const string QP_SKIP = "s";
         private const string QP_QUERY = "query";

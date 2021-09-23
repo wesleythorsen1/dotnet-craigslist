@@ -1,24 +1,25 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Craigslist
 {
-    public partial class CraigslistSearchRequest
+    public partial class SearchRequest
     {
         private static readonly Regex _urlRegex = 
             new Regex(@"https?\://(\w+)\.craigslist\.org/search/(\w{3})(/(\w{3}))?(\?(\S*))?", RegexOptions.Compiled);
 
-        public string Site { get; set; }
-        public string? Area { get; set; }
-        public string Category { get; set; }
+        public string Site { get; }
+        public string? Area { get; }
+        public string Category { get; }
 
-        public Uri Uri => CreateRequestUrl();
+        public Uri Uri => CreateRequestUri();
 
         private IDictionary<string, object> _queryParameters;
 
-        public CraigslistSearchRequest(string url)
+        public SearchRequest(string url)
         {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 throw new ArgumentException("Invalid url", nameof(url));
@@ -53,26 +54,26 @@ namespace Craigslist
             }
         }
 
-        public CraigslistSearchRequest(string site, string category)
+        public SearchRequest(string site, string category)
             : this(site, default, category)
         {
         }
 
-        public CraigslistSearchRequest(string site, string? area, string category)
+        public SearchRequest(string site, string? area, string category)
             : this(site, area, category, new Dictionary<string, object>())
         {
         }
 
-        internal CraigslistSearchRequest(string site, string? area, string category, IDictionary<string, object> parameterStore)
+        public SearchRequest(string site, string? area, string category, IEnumerable<KeyValuePair<string, object>> queryParameters)
         {
             Site = site ?? throw new ArgumentNullException(nameof(site));
             Category = category ?? throw new ArgumentNullException(nameof(category));
             Area = area;
 
-            _queryParameters = parameterStore;
+            _queryParameters = queryParameters?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) ?? throw new ArgumentNullException(nameof(queryParameters));
         }
 
-        protected void SetParameter<T>(string key, T value)
+        public void SetParameter<T>(string key, T value)
         {
             if (EqualityComparer<T>.Default.Equals(value, default(T)))
             {
@@ -83,7 +84,7 @@ namespace Craigslist
             _queryParameters[key] = value!;
         }
 
-        protected T? GetParameter<T>(string key)
+        public T? GetParameter<T>(string key)
         {
             if (_queryParameters.TryGetValue(key, out var value))
             {
@@ -92,7 +93,7 @@ namespace Craigslist
             return default;
         }
 
-        private Uri CreateRequestUrl()
+        private Uri CreateRequestUri()
         {
             var builder = new UriBuilder()
             {
@@ -107,16 +108,47 @@ namespace Craigslist
             }
             builder.Path += $"/{Category}";
 
-            builder.Query = string.Join('&', _queryParameters.Select(kvp => $"{kvp.Key}={ToClQpString(kvp.Value)}"));
+            builder.Query = CreateQueryString();
 
             return builder.Uri;
         }
 
-        private string ToClQpString(object value)
+        private string CreateQueryString()
+        {
+            var parts = new List<string>();
+
+            foreach (var kvp in _queryParameters)
+            {
+                if (kvp.Value is not string && kvp.Value is IEnumerable innerValues)
+                {
+                    foreach (var innerValue in innerValues)
+                    {
+                        parts.Add($"{kvp.Key}={EscapeQpValue(innerValue)}");
+                    }
+                }
+                else
+                {
+                    parts.Add($"{kvp.Key}={EscapeQpValue(kvp.Value)}");
+                }
+            }
+
+            return string.Join('&', parts);
+
+        }
+
+        private string EscapeQpValue(object value)
         {
             if (value is bool)
             {
                 value = (bool)value ? "1" : "0";
+            }
+            else if (value is DateTime dt)
+            {
+                value = dt.ToString("yyyy-MM-dd");
+            }
+            else if (value is Enum)
+            {
+                value = (int)value;
             }
             var str = value.ToString();
             return Uri.EscapeUriString(str!);

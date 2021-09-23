@@ -9,13 +9,13 @@ namespace Craigslist
 {
     internal interface IPageParser
     {
-        CraigslistSearchResults ParseSearchResults(CraigslistSearchRequest request, Stream content);
-        CraigslistListingDetails ParseListingDetails(CraigslistListingRequest request, Stream content);
+        SearchResults ParseSearchResults(SearchRequest request, Stream content);
+        ListingDetails ParseListingDetails(ListingRequest request, Stream content);
     }
 
     internal class PageParser : IPageParser
     {
-        public CraigslistSearchResults ParseSearchResults(CraigslistSearchRequest request, Stream content)
+        public SearchResults ParseSearchResults(SearchRequest request, Stream content)
         {
             var doc = new HtmlDocument();
             doc.Load(content);
@@ -29,14 +29,14 @@ namespace Craigslist
                 ?.Attributes["href"]
                 ?.Value;
                 
-            return new CraigslistSearchResults(request)
+            return new SearchResults(request)
             {
                 Next = next,
-                Listings = rows.Select(r => ParseRow(r)).ToList(),
+                Listings = rows?.Select(r => ParseRow(r)).ToList() ?? Enumerable.Empty<Listing>(),
             };
         }
 
-        public CraigslistListingDetails ParseListingDetails(CraigslistListingRequest request, Stream content)
+        public ListingDetails ParseListingDetails(ListingRequest request, Stream content)
         {
             var doc = new HtmlDocument();
             doc.Load(content);
@@ -55,7 +55,7 @@ namespace Craigslist
                 ?.Value;
 
             var fullTitle = string.Join("", doc.DocumentNode
-                .SelectNodes("//span[@class='postingtitletext']//text()")
+                .SelectNodes("//span[contains(@class, 'postingtitletext')]//text()")
                 .Cast<HtmlTextNode>()
                 .Select(n => n.Text))
                 .Trim();
@@ -68,7 +68,7 @@ namespace Craigslist
             title = HttpUtility.HtmlDecode(title);
 
             var price = doc.DocumentNode
-                .SelectSingleNode("//span[@class='price']")
+                .SelectSingleNode("//span[contains(@class, 'price')]")
                 ?.InnerText;
 
             var descriptionParts = doc.DocumentNode
@@ -96,27 +96,27 @@ namespace Craigslist
             }
 
             var attributes = doc.DocumentNode
-                .SelectNodes("//p[@class='attrgroup']/span")
+                .SelectNodes("//p[contains(@class, 'attrgroup')]/span")
                 .Select(n => string.Join("", n
                     .SelectNodes(".//text()")
                     .Cast<HtmlTextNode>()
                     .Select(t => t.Text)))
-                .ToArray();
+                .ToHashSet();
 
-            return new CraigslistListingDetails(request)
+            return new ListingDetails(request)
             {
                 Posted = DateTime.Parse(posted),
                 Updated = updated == default ? default(DateTime?) : DateTime.Parse(updated),
                 FullTitle = fullTitle,
                 Title = title,
-                Price = price == default ? default(decimal?) : decimal.Parse(price, NumberStyles.Any),
+                Price = string.IsNullOrWhiteSpace(price) ? default(decimal?) : decimal.Parse(price, NumberStyles.Any),
                 Description = description,
                 Location = location,
                 AdditionalAttributes = attributes,
             };
         }
 
-        private CraigslistListing ParseRow(HtmlNode row)
+        private Listing ParseRow(HtmlNode row)
         {
             var id = row.Attributes["data-pid"].Value;
             var link = row.SelectSingleNode(".//a[contains(@class, 'hdrlnk')]");
@@ -134,7 +134,7 @@ namespace Craigslist
             var price = row.SelectSingleNode(".//span[contains(@class, 'result-price')]")?.InnerText;
             var hood = row.SelectSingleNode(".//span[contains(@class, 'result-hood')]")?.InnerText?.Trim(' ', '(', ')');
 
-            return new CraigslistListing(id, url, dateTime, title, price, hood);
+            return new Listing(id, url, dateTime, title, price, hood);
         }
     }
 }

@@ -4,12 +4,12 @@ using System.Globalization;
 
 namespace Craigslist
 {
-    public class CraigslistListingDetails
+    public class ListingDetails
     {
-        internal CraigslistListingDetails(CraigslistListingRequest request) => 
+        internal ListingDetails(ListingRequest request) => 
             Request = request;
 
-        public CraigslistListingRequest Request { get; init; }
+        public ListingRequest Request { get; init; }
 
         public string Id => Request.Id;
 

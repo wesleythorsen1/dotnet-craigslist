@@ -2,12 +2,12 @@ using System;
 
 namespace Craigslist
 {
-    public class CraigslistListing
+    public class Listing
     {
-        internal CraigslistListing(string id, string listingUrl, DateTime date, string title)
+        internal Listing(string id, string listingUrl, DateTime date, string title)
             : this(id, listingUrl, date, title, default, default) { }
 
-        internal CraigslistListing(string id, string listingUrl, DateTime date, string title, string? price, string? hood) => 
+        internal Listing(string id, string listingUrl, DateTime date, string title, string? price, string? hood) => 
             (Id, ListingUrl, Date, Title, Price, Hood) = 
             (id, listingUrl, date, title, price, hood);
 

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Craigslist
 {
-    public partial class CraigslistListingRequest
+    public partial class ListingRequest
     {
         private static readonly Regex _urlRegex = 
             new Regex(@"https?\://(\w+)\.craigslist\.org/(\w{3})(/(\w{3}))?(/d/[-\w]+)?(/(\d+).html)", RegexOptions.Compiled);
@@ -15,13 +15,13 @@ namespace Craigslist
 
         public Uri Uri => CreateRequestUrl();
 
-        public CraigslistListingRequest(string site, string category, string id)
+        public ListingRequest(string site, string category, string id)
             : this(site, default, category, id) { }
 
-        public CraigslistListingRequest(string site, string? area, string category, string id) =>
+        public ListingRequest(string site, string? area, string category, string id) =>
             (Site, Area, Category, Id) = (site, area, category, id);
 
-        public CraigslistListingRequest(string url)
+        public ListingRequest(string url)
         {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 throw new ArgumentException("Invalid url", nameof(url));

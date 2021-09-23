@@ -16,7 +16,7 @@ namespace Craigslist.UnitTests
         public void Test1()
         {
             // arrange
-            var request = new CraigslistListingRequest("https://site.craigslist.org/aaa/apa/123.html");
+            var request = new ListingRequest("https://site.craigslist.org/aaa/apa/123.html");
             var content = new FileStream("listing_detail_1.html", FileMode.Open);
 
             // act
