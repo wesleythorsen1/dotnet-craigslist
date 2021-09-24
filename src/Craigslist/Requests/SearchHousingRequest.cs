@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Craigslist
 {
-    public class HousingRequest : SearchRequest
+    public class SearchHousingRequest : SearchRequest
     {
         private const string QP_MINPRICE = "min_price";
         private const string QP_MAXPRICE = "max_price";
@@ -49,9 +49,9 @@ namespace Craigslist
             public const string WantedSubletTemp = "sbw";
         }
         
-        public HousingRequest(string site, string category) : base(site, category) {}
-        public HousingRequest(string site, string? area, string category) : base(site, area, category) {}
-        internal HousingRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}
+        public SearchHousingRequest(string site, string category) : base(site, category) {}
+        public SearchHousingRequest(string site, string? area, string category) : base(site, area, category) {}
+        internal SearchHousingRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}
 
         public enum AvailabilityMode
         {
