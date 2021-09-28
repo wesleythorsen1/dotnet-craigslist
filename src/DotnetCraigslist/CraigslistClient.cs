@@ -2,7 +2,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public interface ICraigslistClient
     {

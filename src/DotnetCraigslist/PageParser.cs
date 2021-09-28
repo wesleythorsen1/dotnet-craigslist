@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using HtmlAgilityPack;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     internal interface IPageParser
     {
@@ -109,7 +109,7 @@ namespace Craigslist
                 Updated = updated == default ? default(DateTime?) : DateTime.Parse(updated),
                 FullTitle = fullTitle,
                 Title = title,
-                Price = string.IsNullOrWhiteSpace(price) ? default(decimal?) : decimal.Parse(price, NumberStyles.Any),
+                Price = string.IsNullOrWhiteSpace(price) ? default(decimal?) : decimal.Parse(price, NumberStyles.Any, CultureInfo.CreateSpecificCulture("en-US")),
                 Description = description,
                 Location = location,
                 AdditionalAttributes = attributes,

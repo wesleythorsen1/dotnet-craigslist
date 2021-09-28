@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Testing Project
-src/Craigslist.Console/*
+**/DotnetCraigslist.Console/*
 
 # User-specific files
 *.rsuser

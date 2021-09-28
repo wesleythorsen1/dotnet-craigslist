@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public partial class PostingRequest
     {

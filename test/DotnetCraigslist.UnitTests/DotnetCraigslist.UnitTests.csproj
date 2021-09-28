@@ -2,12 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Craigslist\Craigslist.csproj" />
+    <ProjectReference Include="..\..\src\DotnetCraigslist\DotnetCraigslist.csproj" />
   </ItemGroup>
 
   <ItemGroup>

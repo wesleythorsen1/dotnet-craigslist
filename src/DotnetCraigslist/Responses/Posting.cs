@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public class Posting
     {

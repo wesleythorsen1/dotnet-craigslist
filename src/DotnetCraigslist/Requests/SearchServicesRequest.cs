@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public class SearchServicesRequest : SearchRequest
     {

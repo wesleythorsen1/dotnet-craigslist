@@ -1,6 +1,6 @@
 using System;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public class SearchResult
     {

@@ -10,7 +10,7 @@ Disclaimer
 
 * I don't work for or have any affiliation with Craigslist.
 * This module was implemented for educational purposes. It should not be used for crawling or downloading data from Craigslist.
-* This project was initially based on juliomalegria's `python-craigslist <https://github.com/juliomalegria/python-craigslist>`__ project, kudos for the excellent python wrapper and starting point for this project.
+* This project was initially based on juliomalegria's `python-craigslist <https://github.com/juliomalegria/python-craigslist>`__ project, kudos for the excellent python wrapper and reference for this project.
 
 Installation
 ------------
