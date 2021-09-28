@@ -7,15 +7,15 @@ namespace Craigslist
     {
         public static class Categories
         {
-            private const string All = "ggg";
-            private const string ComputerGigs = "cpg";
-            private const string CreativeGigs = "crg";
-            private const string CrewGigs = "cwg";
-            private const string DomesticGigs = "dmg";
-            private const string EventGigs = "evg";
-            private const string LaborGigs = "lbg";
-            private const string TalentGigs = "tlg";
-            private const string WritingGigs = "wrg";
+            public const string All = "ggg";
+            public const string ComputerGigs = "cpg";
+            public const string CreativeGigs = "crg";
+            public const string CrewGigs = "cwg";
+            public const string DomesticGigs = "dmg";
+            public const string EventGigs = "evg";
+            public const string LaborGigs = "lbg";
+            public const string TalentGigs = "tlg";
+            public const string WritingGigs = "wrg";
         }
         
         public SearchGigsRequest(string site, string category) : base(site, category) {}

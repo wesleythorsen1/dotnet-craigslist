@@ -477,77 +477,77 @@ namespace Craigslist
 
 #region bikes
 
-public IEnumerable<BicycleType>? BicycleTypes
-{
-    get => GetParameter<IEnumerable<BicycleType>>(QP_BICYCLETYPE);
-    set => SetParameter(QP_BICYCLETYPE, value);
-}
+        public IEnumerable<BicycleType>? BicycleTypes
+        {
+            get => GetParameter<IEnumerable<BicycleType>>(QP_BICYCLETYPE);
+            set => SetParameter(QP_BICYCLETYPE, value);
+        }
 
-public IEnumerable<BicycleFrameMaterial>? BicycleFrameMaterials
-{
-    get => GetParameter<IEnumerable<BicycleFrameMaterial>>(QP_BICYCLEFRAMEMATERIAL);
-    set => SetParameter(QP_BICYCLEFRAMEMATERIAL, value);
-}
+        public IEnumerable<BicycleFrameMaterial>? BicycleFrameMaterials
+        {
+            get => GetParameter<IEnumerable<BicycleFrameMaterial>>(QP_BICYCLEFRAMEMATERIAL);
+            set => SetParameter(QP_BICYCLEFRAMEMATERIAL, value);
+        }
 
-public IEnumerable<WheelSize>? BicycleWheelSizes
-{
-    get => GetParameter<IEnumerable<WheelSize>>(QP_BICYCLEWHEELSIZE);
-    set => SetParameter(QP_BICYCLEWHEELSIZE, value);
-}
+        public IEnumerable<WheelSize>? BicycleWheelSizes
+        {
+            get => GetParameter<IEnumerable<WheelSize>>(QP_BICYCLEWHEELSIZE);
+            set => SetParameter(QP_BICYCLEWHEELSIZE, value);
+        }
 
-public IEnumerable<Suspension>? BicycleSuspensions
-{
-    get => GetParameter<IEnumerable<Suspension>>(QP_BICYCLESUSPENSION);
-    set => SetParameter(QP_BICYCLESUSPENSION, value);
-}
+        public IEnumerable<Suspension>? BicycleSuspensions
+        {
+            get => GetParameter<IEnumerable<Suspension>>(QP_BICYCLESUSPENSION);
+            set => SetParameter(QP_BICYCLESUSPENSION, value);
+        }
 
-public IEnumerable<BrakeType>? BicycleBrakeTypes
-{
-    get => GetParameter<IEnumerable<BrakeType>>(QP_BICYCLEBRAKETYPE);
-    set => SetParameter(QP_BICYCLEBRAKETYPE, value);
-}
+        public IEnumerable<BrakeType>? BicycleBrakeTypes
+        {
+            get => GetParameter<IEnumerable<BrakeType>>(QP_BICYCLEBRAKETYPE);
+            set => SetParameter(QP_BICYCLEBRAKETYPE, value);
+        }
 
-public IEnumerable<HandlebarType>? BicycleHandlebarTypes
-{
-    get => GetParameter<IEnumerable<HandlebarType>>(QP_BICYCLEHANDLEBARTYPE);
-    set => SetParameter(QP_BICYCLEHANDLEBARTYPE, value);
-}
+        public IEnumerable<HandlebarType>? BicycleHandlebarTypes
+        {
+            get => GetParameter<IEnumerable<HandlebarType>>(QP_BICYCLEHANDLEBARTYPE);
+            set => SetParameter(QP_BICYCLEHANDLEBARTYPE, value);
+        }
 
-public IEnumerable<ElectricAssist>? BicycleElectricAssists
-{
-    get => GetParameter<IEnumerable<ElectricAssist>>(QP_BICYCLEELECTRICASSIST);
-    set => SetParameter(QP_BICYCLEELECTRICASSIST, value);
-}
+        public IEnumerable<ElectricAssist>? BicycleElectricAssists
+        {
+            get => GetParameter<IEnumerable<ElectricAssist>>(QP_BICYCLEELECTRICASSIST);
+            set => SetParameter(QP_BICYCLEELECTRICASSIST, value);
+        }
 
 #endregion
 
 #region boats
 
-public IEnumerable<PropulsionType>? BoatPropulsionTypes
-{
-    get => GetParameter<IEnumerable<PropulsionType>>(QP_BOATPROPULSIONTYPE);
-    set => SetParameter(QP_BOATPROPULSIONTYPE, value);
-}
+        public IEnumerable<PropulsionType>? BoatPropulsionTypes
+        {
+            get => GetParameter<IEnumerable<PropulsionType>>(QP_BOATPROPULSIONTYPE);
+            set => SetParameter(QP_BOATPROPULSIONTYPE, value);
+        }
 
 #endregion
 
 #region cell phones
 
-public IEnumerable<MobileOS>? MobileOSs
-{
-    get => GetParameter<IEnumerable<MobileOS>>(QP_MOBILEOS);
-    set => SetParameter(QP_MOBILEOS, value);
-}
+        public IEnumerable<MobileOS>? MobileOSs
+        {
+            get => GetParameter<IEnumerable<MobileOS>>(QP_MOBILEOS);
+            set => SetParameter(QP_MOBILEOS, value);
+        }
 
 #endregion
 
 #region rvs
 
-public IEnumerable<RvType>? RvTypes
-{
-    get => GetParameter<IEnumerable<RvType>>(QP_RVTYPE);
-    set => SetParameter(QP_RVTYPE, value);
-}
+        public IEnumerable<RvType>? RvTypes
+        {
+            get => GetParameter<IEnumerable<RvType>>(QP_RVTYPE);
+            set => SetParameter(QP_RVTYPE, value);
+        }
 
 #endregion
 
