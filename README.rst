@@ -31,19 +31,44 @@ Looking for a room in San Francisco?
 
 .. code:: C#
 
-    // TODO
+    var client = new CraigslistClient();
+    var request = new SearchHousingRequest("sfbay", SearchHousingRequest.Categories.RoomsAndShares)
+    {
+        MaxPrice = 1500,
+        PrivateRoom = true,
+    };
+    var searchResults = await client.SearchAsync(request);
 
-Maybe a software engineering internship in Silicon Valley?
+Maybe software engineering internships in Silicon Valley?
 
 .. code:: C#
 
-    // TODO
+    var client = new CraigslistClient();
+    var request = new SearchJobsRequest("sfbay", "sby", SearchJobsRequest.Categories.SoftwareQaDbaEtc)
+    {
+        Internship = true,
+        EmploymentTypes = new[]
+        {
+            SearchJobsRequest.EmploymentType.FullTime,
+            SearchJobsRequest.EmploymentType.PartTime,
+        }
+    };
+    var searchResults = client.Search(request);
 
-Events with free food in New York?
+An event with free food in New York?
 
 .. code:: C#
 
-    // TODO
+    var client = new CraigslistClient();
+    var request = new SearchEventsRequest("newyork")
+    {
+        Free = true,
+        FoodDrink = true,
+    };
+    var searchResults = await client.SearchAsync(request);
+    var postingUrl = searchResults.Results.First().ListingUrl; // using System.Linq;
+    var postingRequest = new PostingRequest(postingUrl);
+    var eventPosting = await client.GetPostingAsync(postingRequest);
 
 Where to get `filters` from?
 ----------------------------

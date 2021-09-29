@@ -30,6 +30,7 @@ namespace DotnetCraigslist
             public const string Events = "eve";
         }
         
+        public SearchEventsRequest(string site) : base(site, SearchEventsRequest.Categories.All) {}
         public SearchEventsRequest(string site, string category) : base(site, category) {}
         public SearchEventsRequest(string site, string? area, string category) : base(site, area, category) {}
         internal SearchEventsRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}

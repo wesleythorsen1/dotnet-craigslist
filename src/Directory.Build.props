@@ -13,6 +13,7 @@
     <Nullable>enable</Nullable>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags>craigslist;client;wrapper</PackageTags>
   </PropertyGroup>
   
   <ItemGroup>

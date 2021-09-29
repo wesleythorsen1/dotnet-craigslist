@@ -26,6 +26,7 @@ namespace DotnetCraigslist
             public const string Volunteers = "vol";
         }
         
+        public SearchCommunityRequest(string site) : base(site, SearchCommunityRequest.Categories.All) {}
         public SearchCommunityRequest(string site, string category) : base(site, category) {}
         public SearchCommunityRequest(string site, string? area, string category) : base(site, area, category) {}
         internal SearchCommunityRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}
