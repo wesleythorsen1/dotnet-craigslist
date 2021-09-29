@@ -17,7 +17,7 @@ Installation
 
 ::
 
-    dotnet install package dotnet-craigslist
+    dotnet install package DotnetCraigslist
 
 Classes
 -------
