@@ -1,0 +1,26 @@
+<Project>
+  <PropertyGroup>
+    <PackageIcon>dotnetcraigslist.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wesleythorsen1/dotnet-craigslist</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wesleythorsen1/dotnet-craigslist.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>A dotnet client for Craigslist</Description>
+    <Authors>Wesley Thorsen</Authors>
+    <UpdateVersionProperties>true</UpdateVersionProperties>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags>craigslist;client;wrapper;streaming</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="2.5.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\dotnetcraigslist.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+</Project>

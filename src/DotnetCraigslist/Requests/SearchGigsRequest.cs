@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public class SearchGigsRequest : SearchRequest
     {
@@ -18,6 +18,7 @@ namespace Craigslist
             public const string WritingGigs = "wrg";
         }
         
+        public SearchGigsRequest(string site) : base(site, SearchGigsRequest.Categories.All) {}
         public SearchGigsRequest(string site, string category) : base(site, category) {}
         public SearchGigsRequest(string site, string? area, string category) : base(site, area, category) {}
         internal SearchGigsRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}

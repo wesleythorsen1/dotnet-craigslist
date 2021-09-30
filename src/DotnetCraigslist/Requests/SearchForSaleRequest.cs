@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public class SearchForSaleRequest : SearchRequest
     {
@@ -100,6 +100,7 @@ namespace Craigslist
             public const string Wanted = "waa";
         }
         
+        public SearchForSaleRequest(string site) : base(site, SearchForSaleRequest.Categories.All) {}
         public SearchForSaleRequest(string site, string category) : base(site, category) {}
         public SearchForSaleRequest(string site, string? area, string category) : base(site, area, category) {}
         internal SearchForSaleRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}

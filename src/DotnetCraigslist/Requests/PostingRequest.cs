@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public partial class PostingRequest
     {
@@ -20,6 +20,9 @@ namespace Craigslist
 
         public PostingRequest(string site, string? area, string category, string id) =>
             (Site, Area, Category, Id) = (site, area, category, id);
+
+        public PostingRequest(SearchResult searchResult)
+            : this(searchResult.PostingUrl) { }
 
         public PostingRequest(string url)
         {

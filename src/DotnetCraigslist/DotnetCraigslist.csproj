@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +10,7 @@
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-    <_Parameter1>Craigslist.UnitTests</_Parameter1>
+    <_Parameter1>DotnetCraigslist.UnitTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 </Project>

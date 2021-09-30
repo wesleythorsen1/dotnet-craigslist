@@ -1,7 +1,7 @@
 using System.IO;
 using Xunit;
 
-namespace Craigslist.UnitTests
+namespace DotnetCraigslist.UnitTests
 {
     public class ParseSearchResults
     {

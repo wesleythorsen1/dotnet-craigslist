@@ -10,40 +10,131 @@ Disclaimer
 
 * I don't work for or have any affiliation with Craigslist.
 * This module was implemented for educational purposes. It should not be used for crawling or downloading data from Craigslist.
-* This project was initially based on juliomalegria's `python-craigslist <https://github.com/juliomalegria/python-craigslist>`__ project, kudos for the excellent python wrapper and starting point for this project.
+* This project was initially based on juliomalegria's `python-craigslist <https://github.com/juliomalegria/python-craigslist>`__ project, kudos for the excellent python wrapper and reference for this project.
 
 Installation
 ------------
 
 ::
 
-    dotnet install package dotnet-craigslist
+    dotnet install package DotnetCraigslist
+
+Quick Start
+----------
+
+Example `Program.cs`:
+
+.. code:: C#
+
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using DotnetCraigslist;
+
+    var client = new CraigslistClient();
+
+    // Create search request
+    var request = new SearchHousingRequest("seattle", SearchHousingRequest.Categories.ApartmentsHousingForRent)
+    {
+        MaxPrice = 1500,
+        MinBedrooms = 1,
+        ParkingOptions = new[]
+        {
+            SearchHousingRequest.Parking.Carport,
+            SearchHousingRequest.Parking.AttachedGarage,
+        },
+        // "Miles From Location":
+        PostalCode = "98101",
+        SearchDistance = 3.5f,
+    };
+
+    // Send search request
+    var searchResults = await client.SearchAsync(request);
+
+    // Print search results
+    foreach (var result in searchResults.Results)
+    {
+        Console.WriteLine($"{result.Date.ToString("T"),-13}{result.Price,-9}{result.Title,-27}");
+    }
+
+    // Find newest posting in search results
+    var newestSearchResult = searchResults.Results
+        .OrderByDescending(r => r.Date)
+        .First();
+
+    // Create a posting request from the search result
+    var postingRequest = new PostingRequest(newestSearchResult);
+
+    // Send posting request
+    var posting = await client.GetPostingAsync(postingRequest);
+
+    // Print the posting details
+    Console.WriteLine($@"
+    URL: {posting.PostingUri}
+    ID: {posting.Id}
+    Posted: {posting.Posted.ToString("O")}
+    Price: {posting.Price}
+    Title: {posting.Title}
+    Location: ({posting.Location?.Latitude}, {posting.Location?.Longitude})
+    Additional Attributes: {string.Join(", ", posting.AdditionalAttributes)}
+    Description:
+    {posting.Description}");
+
+The above code demonstrates how to:
+
+1. Create and send a search request (equivalent of searching Craigslist)
+2. Creating a posting request from an item in the seach results, and sending the posting request (equivalent of clicking an item in the search results and viewing the posting on Craigslist)
 
 Classes
 -------
 
 TODO
 
-Examples
+Other Examples
 --------
 
 Looking for a room in San Francisco?
 
 .. code:: C#
 
-    // TODO
+    var client = new CraigslistClient();
+    var request = new SearchHousingRequest("sfbay", SearchHousingRequest.Categories.RoomsAndShares)
+    {
+        MaxPrice = 1500,
+        PrivateRoom = true,
+    };
+    var searchResults = await client.SearchAsync(request);
 
-Maybe a software engineering internship in Silicon Valley?
+Maybe software engineering internships in Silicon Valley?
 
 .. code:: C#
 
-    // TODO
+    var client = new CraigslistClient();
+    var request = new SearchJobsRequest("sfbay", "sby", SearchJobsRequest.Categories.SoftwareQaDbaEtc)
+    {
+        Internship = true,
+        EmploymentTypes = new[]
+        {
+            SearchJobsRequest.EmploymentType.FullTime,
+            SearchJobsRequest.EmploymentType.PartTime,
+        }
+    };
+    var searchResults = client.Search(request);
 
-Events with free food in New York?
+An event with free food in New York?
 
 .. code:: C#
 
-    // TODO
+    var client = new CraigslistClient();
+    var request = new SearchEventsRequest("newyork")
+    {
+        Free = true,
+        FoodDrink = true,
+    };
+    var searchResults = await client.SearchAsync(request);
+    var postingUrl = searchResults.Results.First().ListingUrl; // using System.Linq;
+    var postingRequest = new PostingRequest(postingUrl);
+    var eventPosting = await client.GetPostingAsync(postingRequest);
 
 Where to get `filters` from?
 ----------------------------

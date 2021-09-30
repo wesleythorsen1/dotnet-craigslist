@@ -1,4 +1,4 @@
-namespace Craigslist
+namespace DotnetCraigslist
 {
     readonly public struct GeoCoordinate
     {

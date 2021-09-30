@@ -1,4 +1,4 @@
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public partial class SearchRequest
     {

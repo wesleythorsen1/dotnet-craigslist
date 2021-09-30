@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Testing Project
-src/Craigslist.Console/*
+**/DotnetCraigslist.Console/*
 
 # User-specific files
 *.rsuser
@@ -451,3 +451,7 @@ $RECYCLE.BIN/
 ## Visual Studio Code
 ##
 .vscode/*
+
+# Local Files
+dotnet-craigslist.local.sln
+local/

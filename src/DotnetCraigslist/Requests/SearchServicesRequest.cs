@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Craigslist
+namespace DotnetCraigslist
 {
     public class SearchServicesRequest : SearchRequest
     {
@@ -29,6 +29,7 @@ namespace Craigslist
             public const string WritingEditingTranslation = "wet";
         }
         
+        public SearchServicesRequest(string site) : base(site, SearchServicesRequest.Categories.All) {}
         public SearchServicesRequest(string site, string category) : base(site, category) {}
         public SearchServicesRequest(string site, string? area, string category) : base(site, area, category) {}
         internal SearchServicesRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}
