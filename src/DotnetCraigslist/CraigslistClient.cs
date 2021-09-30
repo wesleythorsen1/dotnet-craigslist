@@ -24,6 +24,7 @@ namespace DotnetCraigslist
             if (_staticHttpClient == default)
             {
                 _staticHttpClient = new HttpClient();
+                _staticHttpClient.DefaultRequestHeaders.ConnectionClose = true;
             }
             _httpClient = _staticHttpClient;
         }

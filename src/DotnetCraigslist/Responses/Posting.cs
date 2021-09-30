@@ -23,9 +23,7 @@ namespace DotnetCraigslist
 
         public string? Title { get; init; }
 
-        public decimal? Price { get; init; }
-
-        public string? PriceText => Price?.ToString("C", CultureInfo.CurrentCulture);
+        public string? Price { get; init; }
 
         public string? Description { get; init; }
 

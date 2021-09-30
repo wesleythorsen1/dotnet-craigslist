@@ -21,6 +21,9 @@ namespace DotnetCraigslist
         public PostingRequest(string site, string? area, string category, string id) =>
             (Site, Area, Category, Id) = (site, area, category, id);
 
+        public PostingRequest(SearchResult searchResult)
+            : this(searchResult.PostingUrl) { }
+
         public PostingRequest(string url)
         {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))

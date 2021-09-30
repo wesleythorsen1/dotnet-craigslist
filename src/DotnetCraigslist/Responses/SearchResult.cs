@@ -8,12 +8,12 @@ namespace DotnetCraigslist
             : this(id, listingUrl, date, title, default, default) { }
 
         internal SearchResult(string id, string listingUrl, DateTime date, string title, string? price, string? hood) => 
-            (Id, ListingUrl, Date, Title, Price, Hood) = 
+            (Id, PostingUrl, Date, Title, Price, Hood) = 
             (id, listingUrl, date, title, price, hood);
 
         public string Id { get; }
 
-        public string ListingUrl { get; }
+        public string PostingUrl { get; }
 
         public DateTime Date { get; }
 

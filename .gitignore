@@ -451,3 +451,7 @@ $RECYCLE.BIN/
 ## Visual Studio Code
 ##
 .vscode/*
+
+# Local Files
+dotnet-craigslist.local.sln
+local/
