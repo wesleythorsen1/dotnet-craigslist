@@ -1,6 +1,10 @@
 dotnet-craigslist
 =================
 
+[![](https://img.shields.io/github/workflow/status/wesleythorsen1/dotnet-craigslist/Build%20and%20Publish)](https://github.com/wesleythorsen1/dotnet-craigslist/actions/workflows/build.yml)
+![](https://img.shields.io/nuget/dt/DotnetCraigslist)
+![](https://img.shields.io/nuget/v/DotnetCraigslist)
+
 A simple `Craigslist <http://www.craigslist.org>`__ wrapper for dotnet.
 
 License: `MIT-Zero <https://romanrm.net/mit-zero>`__.
