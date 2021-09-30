@@ -5,21 +5,19 @@ dotnet-craigslist
 ![](https://img.shields.io/nuget/dt/DotnetCraigslist)
 ![](https://img.shields.io/nuget/v/DotnetCraigslist)
 
-A simple `Craigslist <http://www.craigslist.org>`__ wrapper for dotnet.
+A simple [Craigslist](http://www.craigslist.org) client for dotnet.
 
-License: `MIT-Zero <https://romanrm.net/mit-zero>`__.
+License: [MIT](https://opensource.org/licenses/MIT)
 
 Disclaimer
 ----------
 
 * I don't work for or have any affiliation with Craigslist.
 * This module was implemented for educational purposes. It should not be used for crawling or downloading data from Craigslist.
-* This project was initially based on juliomalegria's `python-craigslist <https://github.com/juliomalegria/python-craigslist>`__ project, kudos for the excellent python wrapper and reference for this project.
+* This project was inspired by juliomalegria's [python-craigslist](https://github.com/juliomalegria/python-craigslist) project, kudos for the excellent python client and reference for this project.
 
 Installation
 ------------
-
-::
 
     dotnet install package DotnetCraigslist
 
@@ -27,8 +25,6 @@ Quick Start
 ----------
 
 Example `Program.cs`:
-
-.. code:: C#
 
     using System;
     using System.Linq;
