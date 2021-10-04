@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -22,17 +21,20 @@ namespace DotnetCraigslist
             
             var rows = doc.DocumentNode
                 .SelectSingleNode("//ul[@id='search-results']")
-                .SelectNodes(".//li[contains(@class, 'result-row')]");
+                .ChildNodes
+                .TakeWhile(n => !n.HasClass("nearby"))
+                .Where(n => n.HasClass("result-row"));
 
             var next = doc.DocumentNode
                 .SelectSingleNode("//head/link[contains(@rel, 'next')]")
                 ?.Attributes["href"]
                 ?.Value;
+            next = HttpUtility.HtmlDecode(next);
                 
             return new SearchResults(request)
             {
                 Next = next,
-                Results = rows?.Select(r => ParseRow(r)).ToList() ?? Enumerable.Empty<SearchResult>(),
+                Results = rows?.Select(r => ParseRow(r)).ToArray() ?? Enumerable.Empty<SearchResult>(),
             };
         }
 
