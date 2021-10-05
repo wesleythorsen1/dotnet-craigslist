@@ -16,13 +16,15 @@ namespace DotnetCraigslist
 
     public class CraigslistStreamingClient : ICraigslistStreamingClient
     {
-        private static readonly TimeSpan FIFTEEN_MINUTES = TimeSpan.FromMinutes(15);
+        private static readonly TimeSpan FIVE_MINUTES = TimeSpan.FromMinutes(5);
 
         private readonly ICraigslistClient _client;
 
-        public CraigslistStreamingClient() : this(new CraigslistClient()) { }
+        public CraigslistStreamingClient()
+            : this(StaticHttpClient.DefaultClient) { }
 
-        public CraigslistStreamingClient(HttpClient httpClient) : this(new CraigslistClient(httpClient)) { }
+        public CraigslistStreamingClient(HttpClient httpClient)
+            : this(new CraigslistClient(httpClient)) { }
 
         internal CraigslistStreamingClient(ICraigslistClient client)
         {
@@ -33,9 +35,9 @@ namespace DotnetCraigslist
             SearchRequest request, 
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            await foreach(var listing in StreamSearchResults(request, cancellationToken))
+            await foreach(var searchResult in StreamSearchResults(request, cancellationToken))
             {
-                var postingRequest = new PostingRequest(listing);
+                var postingRequest = new PostingRequest(searchResult);
                 yield return await _client.GetPostingAsync(postingRequest, cancellationToken);
             }
         }
@@ -65,7 +67,7 @@ namespace DotnetCraigslist
 
                 maxResults = 3000;
 
-                var wait = FIFTEEN_MINUTES - (DateTime.UtcNow - start);
+                var wait = FIVE_MINUTES - (DateTime.UtcNow - start);
                 if (wait > TimeSpan.Zero)
                 {
                     await Task.Delay((int)wait.TotalMilliseconds, cancellationToken);
