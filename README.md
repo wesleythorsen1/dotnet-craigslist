@@ -2,8 +2,8 @@ dotnet-craigslist
 =================
 
 [![](https://img.shields.io/github/workflow/status/wesleythorsen1/dotnet-craigslist/Build%20and%20Publish)](https://github.com/wesleythorsen1/dotnet-craigslist/actions/workflows/build.yml)
-![](https://img.shields.io/nuget/dt/DotnetCraigslist)
-![](https://img.shields.io/nuget/v/DotnetCraigslist)
+[![](https://img.shields.io/nuget/dt/DotnetCraigslist)](https://www.nuget.org/packages/DotnetCraigslist/)
+[![](https://img.shields.io/nuget/v/DotnetCraigslist)](https://www.nuget.org/packages/DotnetCraigslist/)
 
 A simple [Craigslist](http://www.craigslist.org) client for dotnet.
 
@@ -19,166 +19,199 @@ Disclaimer
 Installation
 ------------
 
-    dotnet install package DotnetCraigslist
+    dotnet add package DotnetCraigslist
 
 Quick Start
-----------
+-----------
 
 Example `Program.cs`:
 
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using DotnetCraigslist;
+```C#
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using DotnetCraigslist;
 
-    var client = new CraigslistClient();
+var client = new CraigslistClient();
 
-    // Create search request
-    var request = new SearchHousingRequest("seattle", SearchHousingRequest.Categories.ApartmentsHousingForRent)
+// Create search request
+var request = new SearchHousingRequest("seattle", SearchHousingRequest.Categories.ApartmentsHousingForRent)
+{
+    MaxPrice = 1500,
+    MinBedrooms = 1,
+    ParkingOptions = new[]
     {
-        MaxPrice = 1500,
-        MinBedrooms = 1,
-        ParkingOptions = new[]
-        {
-            SearchHousingRequest.Parking.Carport,
-            SearchHousingRequest.Parking.AttachedGarage,
-        },
-        // "Miles From Location":
-        PostalCode = "98101",
-        SearchDistance = 3.5f,
-    };
+        SearchHousingRequest.Parking.Carport,
+        SearchHousingRequest.Parking.AttachedGarage,
+    },
+    // "Miles From Location":
+    PostalCode = "98101",
+    SearchDistance = 3.5f,
+};
 
-    // Send search request
-    var searchResults = await client.SearchAsync(request);
+// Send search request
+var searchResults = await client.SearchAsync(request);
 
-    // Print search results
-    foreach (var result in searchResults.Results)
-    {
-        Console.WriteLine($"{result.Date.ToString("T"),-13}{result.Price,-9}{result.Title,-27}");
-    }
+// Print search results
+foreach (var result in searchResults.Results)
+{
+    Console.WriteLine($"{result.Date.ToString("T"),-13}{result.Price,-9}{result.Title,-27}");
+}
 
-    // Find newest posting in search results
-    var newestSearchResult = searchResults.Results
-        .OrderByDescending(r => r.Date)
-        .First();
-
+// Get the posting details of the first 5 results
+foreach (var searchResult in searchResults.Results.Take(5))
+{
     // Create a posting request from the search result
-    var postingRequest = new PostingRequest(newestSearchResult);
+    var postingRequest = new PostingRequest(searchResult);
 
     // Send posting request
     var posting = await client.GetPostingAsync(postingRequest);
 
     // Print the posting details
     Console.WriteLine($@"
-    URL: {posting.PostingUri}
-    ID: {posting.Id}
-    Posted: {posting.Posted.ToString("O")}
-    Price: {posting.Price}
-    Title: {posting.Title}
-    Location: ({posting.Location?.Latitude}, {posting.Location?.Longitude})
-    Additional Attributes: {string.Join(", ", posting.AdditionalAttributes)}
-    Description:
-    {posting.Description}");
-
+Url: {posting.PostingUrl}
+Id: {posting.Id}
+PostedOn: {posting.PostedOn.ToString("O")}
+UpdatedOn: {posting.UpdatedOn?.ToString("O")}
+Price: {posting.Price}
+Title: {posting.Title}
+Location: ({posting.Location?.Latitude}, {posting.Location?.Longitude})
+Additional Attributes: {string.Join(", ", posting.AdditionalAttributes)}
+Description:
+{posting.Description}
+");
+}
+```
 The above code demonstrates how to:
 
 1. Create and send a search request (equivalent of searching Craigslist)
 2. Creating a posting request from an item in the seach results, and sending the posting request (equivalent of clicking an item in the search results and viewing the posting on Craigslist)
 
-Classes
--------
+Streaming
+---------
 
-TODO
+The `CraigslistStreamingClient` can be used to continuously stream new search results and postings.
+
+* `.StreamSearchResults(...)` will periodically search Craigslist and return any new search results.
+* `.StreamPostings(...)` will do the same, however it will perform an additional request per new search result to get the posting's full details.
+
+```C#
+using System;
+using DotnetCraigslist;
+
+var client = new CraigslistStreamingClient();
+
+var request = new SearchForSaleRequest("losangeles", SearchForSaleRequest.Categories.Electronics)
+{
+    SearchText = "graphics card",
+};
+
+await foreach(var posting in client.StreamPostings(request))
+{
+    Console.WriteLine($"{posting.PostedOn.ToString("T"),-12}{posting.Price,-9}{posting.Title,-100} Attributes: {string.Join(", ", posting.AdditionalAttributes),-140}");
+}
+```
+
+Notes:
+
+* The `CraigslistStreamingClient` will refresh the search results every 5 minutes. However, Craigslist only indexes new postings every 15 minutes. In general you will only see new results every 15 minutes. Be patient.
+* Items returned in stream will be in the reverse order listed on search page. (oldest will be returned first)
+* When `.StreamSearchResults(...)` or `.StreamPostings(...)` is initially called, it will return the first 5 search results, even if they are not new. This allows the client to determine which subsequent results are new. If you wish to see ONLY new results after the stream is started, ignore the first 5 results returned.
+* If `.StreamPostings(...)` is used, an additional request per new search result will be made in order to get the full posting details. Be aware that this could cause a large number of requests, resulting in a Craigslist ban, or the stream falling behind. To avoid this, try narrowing down the initial search request to limit the number of results returned.
+
+Limitations
+-----------
+
+Sending a large number of / frequent requests to Craigslist will result in a IP ban. To avoid this, the default constructors of the `CraigslistClient` and `CraigslistStreamingClient` use a request time limiter, and will force all requests to wait 5 seconds from the previous request before sending. This helps ensure that out-of-the-box users do not unintentionally get banned. If you wish to change this behavior, provide your own `HttpClient` to the constructors of the `CraigslistClient` or `CraigslistStreamingClient` classes.
 
 Other Examples
 --------
 
-Looking for a room in San Francisco?
+Looking for software engineering internships in Silicon Valley?
 
-.. code:: C#
-
-    var client = new CraigslistClient();
-    var request = new SearchHousingRequest("sfbay", SearchHousingRequest.Categories.RoomsAndShares)
+```C#
+var client = new CraigslistClient();
+var request = new SearchJobsRequest("sfbay", "sby", SearchJobsRequest.Categories.SoftwareQaDbaEtc)
+{
+    Internship = true,
+    EmploymentTypes = new[]
     {
-        MaxPrice = 1500,
-        PrivateRoom = true,
-    };
-    var searchResults = await client.SearchAsync(request);
-
-Maybe software engineering internships in Silicon Valley?
-
-.. code:: C#
-
-    var client = new CraigslistClient();
-    var request = new SearchJobsRequest("sfbay", "sby", SearchJobsRequest.Categories.SoftwareQaDbaEtc)
-    {
-        Internship = true,
-        EmploymentTypes = new[]
-        {
-            SearchJobsRequest.EmploymentType.FullTime,
-            SearchJobsRequest.EmploymentType.PartTime,
-        }
-    };
-    var searchResults = client.Search(request);
+        SearchJobsRequest.EmploymentType.FullTime,
+        SearchJobsRequest.EmploymentType.PartTime,
+    }
+};
+var searchResults = client.Search(request);
+```
 
 An event with free food in New York?
 
-.. code:: C#
+```C#
+var client = new CraigslistClient();
+var request = new SearchEventsRequest("newyork")
+{
+    Free = true,
+    FoodDrink = true,
+};
+var searchResults = await client.SearchAsync(request);
 
-    var client = new CraigslistClient();
-    var request = new SearchEventsRequest("newyork")
-    {
-        Free = true,
-        FoodDrink = true,
-    };
-    var searchResults = await client.SearchAsync(request);
-    var postingUrl = searchResults.Results.First().ListingUrl; // using System.Linq;
-    var postingRequest = new PostingRequest(postingUrl);
-    var eventPosting = await client.GetPostingAsync(postingRequest);
+var postingUrl = searchResults.Results.First().ListingUrl;
+var postingRequest = new PostingRequest(postingUrl);
+var eventPosting = await client.GetPostingAsync(postingRequest);
+```
 
-Where to get `filters` from?
-----------------------------
+Classes
+-------
 
-Every subclass has its own set of filters. To get a list of all the filters
-supported by a specific subclass, use the ``.show_filters()`` class-method:
+* `CraigslistClient`
+  * For sending search and posting requests.
+* `CraigslistStreamingClient`
+  * For continuously streaming new search results or postings
+* Requests
+  * `SearchRequest`
+    * A base search request type. Can be used instread of the derived classes. Use these to "search" Craigslist.
+    * `SearchCommunityRequest`
+    * `SearchEventsRequest`
+    * `SearchForSaleRequest`
+    * `SearchGigsRequest`
+    * `SearchHousingRequest`
+    * `SearchJobsRequest`
+    * `SearchResumesRequest`
+    * `SearchServicesRequest`
+  * `PostingRequest`
+    * A request type for getting postings on Craigslist. Use this to get the full details on individual postings.
+* Responses
+  * `SearchResults`
+    * Contains a "page" of search results from Craigslist. Use the `.NextUrl` property to navigate to the next page of results.
+  * `SearchResult`
+    * An individual search result that is displayed on the Search Results page.
+  * `Posting`
+    * Represents a posting on Craigslist. Contains all information that is on a posting.
 
-.. code:: C#
+Where to get `site` and `area` from?
+------------------------------------
 
-   // TODO
+When initializing any of the request types, you'll need to provide the `site`, and optionally `area`, from where you want to query data.
 
-Where to get ``site`` and ``area`` from?
-----------------------------------------
+To get the correct `site`, follow these steps:
 
-When initializing any of the subclasses, you'll need to provide the ``site``, and optionall the ``area``, from where you want to query data.
-
-To get the correct ``site``, follow these steps:
-
-1. Go to `craigslist.org/about/sites <https://www.craigslist.org/about/sites>`__.
+1. Go to [craigslist.org/about/sites](https://www.craigslist.org/about/sites).
 2. Find the country or city you're interested on, and click on it.
-3. You'll be directed to ``<site>.craigslist.org``. The value of ``<site>`` in the URL is the one you should use.
+3. You'll be directed to `<site>.craigslist.org`. The value of `<site>` in the URL is the one you should use.
 
 Not all sites have areas. To check if your site has areas, check for links next to the title of the Craigslist page, on the top center. For example, for New York you'll see:
 
-.. image:: https://user-images.githubusercontent.com/1008637/45307206-bb404d80-b51e-11e8-8e6d-edfbdbd0a6fa.png
+![](https://user-images.githubusercontent.com/1008637/45307206-bb404d80-b51e-11e8-8e6d-edfbdbd0a6fa.png)
 
-Click on the one you're interested, and you'll be redirected to ``<site>.craigslist.org/<area>``. The value of ``<area>`` in the URL is the one you should use. If there are no areas next to the title, it means your site has no areas, and you can leave that argument unset.
+Click on the one you're interested, and you'll be redirected to `<site>.craigslist.org/<area>`. The value of `<area>` in the URL is the one you should use. If there are no areas next to the title, it means your site has no areas, and you can leave that argument unset.
 
-Where to get ``category`` from?
--------------------------------
+Where to get `category` from?
+-----------------------------
 
-You can additionally provide a ``category`` when initializing any of the subclasses. To get a list of all the categories
-supported by a specific subclass, use the ``.show_categories()`` class-method:
+Each of the SearchRequest classes contains a static class `Categories` with constant values for all valid categories. They can be accesed like: `SearchForSaleRequest.Categories.Electronics`.
 
-.. code:: C#
-    
-    // TODO
-
-Is there a limit for the number of results?
---------------------------------------------
-
-Yes, Craigslist caps the results for any search to 3000.
+Alternatively, you can specifiy your own category. They can be found in the url when searching Craigslist: `<site>.craigslist.org/search/<area>/<category>`
 
 Support
 -------
 
-If you find any bug or you want to propose a new feature, please use the `issues tracker <https://github.com/wesleythorsen1/dotnet-craigslist/issues>`__. I'll be happy to help you! :-)
+If you find any bug or you want to propose a new feature, please use the [issues tracker](https://github.com/wesleythorsen1/dotnet-craigslist/issues). I'll be happy to help you! :-)
