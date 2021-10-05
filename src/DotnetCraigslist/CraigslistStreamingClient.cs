@@ -44,8 +44,8 @@ namespace DotnetCraigslist
             SearchRequest request, 
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var previousResults = new FifoHashSet<string>(5);
-            var maxResults = 5;
+            var previousResults = new FifoHashSet<string>(10);
+            var maxResults = 10;
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -63,7 +63,7 @@ namespace DotnetCraigslist
                     yield return r;
                 }
 
-                maxResults = 3000; // set to 3000 after first run
+                maxResults = 3000;
 
                 var wait = FIFTEEN_MINUTES - (DateTime.UtcNow - start);
                 if (wait > TimeSpan.Zero)
