@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -22,17 +21,20 @@ namespace DotnetCraigslist
             
             var rows = doc.DocumentNode
                 .SelectSingleNode("//ul[@id='search-results']")
-                .SelectNodes(".//li[contains(@class, 'result-row')]");
+                .ChildNodes
+                .TakeWhile(n => !n.HasClass("nearby"))
+                .Where(n => n.HasClass("result-row"));
 
             var next = doc.DocumentNode
                 .SelectSingleNode("//head/link[contains(@rel, 'next')]")
                 ?.Attributes["href"]
                 ?.Value;
+            next = HttpUtility.HtmlDecode(next);
                 
             return new SearchResults(request)
             {
-                Next = next,
-                Results = rows?.Select(r => ParseRow(r)).ToList() ?? Enumerable.Empty<SearchResult>(),
+                NextPageUrl = next,
+                Results = rows?.Select(r => ParseRow(r)).ToArray() ?? Enumerable.Empty<SearchResult>(),
             };
         }
 
@@ -45,6 +47,7 @@ namespace DotnetCraigslist
                 .SelectSingleNode("//p[@id='display-date']/time")
                 .Attributes["datetime"]
                 .Value;
+            var postedDT = DateTime.Parse(posted);
                 
             var updated = doc.DocumentNode
                 .SelectSingleNode("//div[contains(@class, 'postinginfos')]")
@@ -53,6 +56,7 @@ namespace DotnetCraigslist
                 ?.SelectSingleNode(".//time")
                 ?.Attributes["datetime"]
                 ?.Value;
+            var updatedDT = updated == default ? default(DateTime?) : DateTime.Parse(updated);
 
             var fullTitle = string.Join("", doc.DocumentNode
                 .SelectNodes("//span[contains(@class, 'postingtitletext')]//text()")
@@ -103,10 +107,9 @@ namespace DotnetCraigslist
                     .Select(t => t.Text)))
                 .ToHashSet();
 
-            return new Posting(request)
+            return new Posting(request, request.Id, request.Url, postedDT)
             {
-                Posted = DateTime.Parse(posted),
-                Updated = updated == default ? default(DateTime?) : DateTime.Parse(updated),
+                UpdatedOn = updatedDT,
                 FullTitle = fullTitle,
                 Title = title,
                 Price = price,
@@ -134,7 +137,11 @@ namespace DotnetCraigslist
             var price = row.SelectSingleNode(".//span[contains(@class, 'result-price')]")?.InnerText;
             var hood = row.SelectSingleNode(".//span[contains(@class, 'result-hood')]")?.InnerText?.Trim(' ', '(', ')');
 
-            return new SearchResult(id, url, dateTime, title, price, hood);
+            return new SearchResult(id, new Uri(url), dateTime, title)
+            {
+                Price = price,
+                Hood = hood,
+            };
         }
     }
 }

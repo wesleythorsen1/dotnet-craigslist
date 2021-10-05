@@ -14,20 +14,11 @@ namespace DotnetCraigslist
 
     public class CraigslistClient : ICraigslistClient
     {
-        private static HttpClient? _staticHttpClient;
         private readonly HttpClient _httpClient;
         private readonly IPageParser _pageParser;
 
         public CraigslistClient()
-            : this(default!)
-        {
-            if (_staticHttpClient == default)
-            {
-                _staticHttpClient = new HttpClient();
-                _staticHttpClient.DefaultRequestHeaders.ConnectionClose = true;
-            }
-            _httpClient = _staticHttpClient;
-        }
+            : this(StaticHttpClient.DefaultClient) { }
 
         public CraigslistClient(HttpClient httpClient)
             : this(httpClient, new PageParser()) { }
@@ -37,7 +28,7 @@ namespace DotnetCraigslist
 
         public SearchResults Search(SearchRequest request)
         {
-            using var req = new HttpRequestMessage(HttpMethod.Get, request.Uri);
+            using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
             using var response = _httpClient.Send(req);
             response.EnsureSuccessStatusCode();
 
@@ -48,7 +39,7 @@ namespace DotnetCraigslist
 
         public async Task<SearchResults> SearchAsync(SearchRequest request, CancellationToken cancellationToken = default)
         {
-            using var req = new HttpRequestMessage(HttpMethod.Get, request.Uri);
+            using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
             using var response = await _httpClient.SendAsync(req, cancellationToken);
             response.EnsureSuccessStatusCode();
 
@@ -59,7 +50,7 @@ namespace DotnetCraigslist
 
         public Posting GetPosting(PostingRequest request)
         {
-            using var req = new HttpRequestMessage(HttpMethod.Get, request.Uri);
+            using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
             using var response = _httpClient.Send(req);
             response.EnsureSuccessStatusCode();
 
@@ -70,7 +61,7 @@ namespace DotnetCraigslist
 
         public async Task<Posting> GetPostingAsync(PostingRequest request, CancellationToken cancellationToken = default)
         {
-            using var req = new HttpRequestMessage(HttpMethod.Get, request.Uri);
+            using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
             using var response = await _httpClient.SendAsync(req, cancellationToken);
             response.EnsureSuccessStatusCode();
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DotnetCraigslist
 {
@@ -7,10 +8,10 @@ namespace DotnetCraigslist
         internal SearchResults(SearchRequest request) => 
             Request = request;
 
-        public string? Next { get; set; }
+        public SearchRequest Request { get; }
 
-        public SearchRequest Request { get; set; }
+        public string? NextPageUrl { get; init; }
 
-        public IEnumerable<SearchResult> Results { get; set; } = new List<SearchResult>();
+        public IEnumerable<SearchResult> Results { get; init; } = Enumerable.Empty<SearchResult>();
     }
 }

@@ -9,13 +9,13 @@ namespace DotnetCraigslist
     public partial class SearchRequest
     {
         private static readonly Regex _urlRegex = 
-            new Regex(@"https?\://(\w+)\.craigslist\.org/search/(\w{3})(/(\w{3}))?(\?(\S*))?", RegexOptions.Compiled);
+            new Regex(@"https?\://(\w+)\.craigslist\.org(/d/[-\w]+)?/search/(\w{3})(/(\w{3}))?(\?(\S*))?", RegexOptions.Compiled);
 
         public string Site { get; }
         public string? Area { get; }
         public string Category { get; }
 
-        public Uri Uri => CreateRequestUri();
+        public Uri Url => CreateRequestUrl();
 
         private IDictionary<string, object> _queryParameters;
 
@@ -31,22 +31,22 @@ namespace DotnetCraigslist
 
             Site = match.Groups[1].Value;
 
-            if (match.Groups[3].Success == false)
+            if (match.Groups[4].Success == false)
             {
-                Category = match.Groups[2].Value;
+                Category = match.Groups[3].Value;
             }
             else
             {
-                Area = match.Groups[2].Value;
-                Category = match.Groups[4].Value;
+                Area = match.Groups[3].Value;
+                Category = match.Groups[5].Value;
             }
 
-            if (match.Groups[6].Success)
+            if (match.Groups[7].Success)
             {
-                _queryParameters = match.Groups[6].Value
+                _queryParameters = match.Groups[7].Value
                     .Split('&')
                     .Select(p => p.Split('='))
-                    .ToDictionary(p => p[0], p => (object)p[1]);
+                    .ToDictionary(p => p[0], p => (object)Uri.UnescapeDataString(p[1]));
             }
             else
             {
@@ -93,7 +93,7 @@ namespace DotnetCraigslist
             return default;
         }
 
-        private Uri CreateRequestUri()
+        private Uri CreateRequestUrl()
         {
             var builder = new UriBuilder()
             {
