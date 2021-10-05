@@ -100,7 +100,7 @@ namespace DotnetCraigslist
             }
 
             var attributes = doc.DocumentNode
-                .SelectNodes("//p[contains(@class, 'attrgroup')]/span")
+                .SelectNodes("//p[contains(@class, 'attrgroup')]/span")?
                 .Select(n => string.Join("", n
                     .SelectNodes(".//text()")
                     .Cast<HtmlTextNode>()
@@ -115,7 +115,7 @@ namespace DotnetCraigslist
                 Price = price,
                 Description = description,
                 Location = location,
-                AdditionalAttributes = attributes,
+                AdditionalAttributes = attributes ?? Enumerable.Empty<string>(),
             };
         }
 
