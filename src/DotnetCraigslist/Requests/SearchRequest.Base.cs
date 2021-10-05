@@ -15,7 +15,7 @@ namespace DotnetCraigslist
         public string? Area { get; }
         public string Category { get; }
 
-        public Uri Uri => CreateRequestUri();
+        public Uri Url => CreateRequestUrl();
 
         private IDictionary<string, object> _queryParameters;
 
@@ -93,7 +93,7 @@ namespace DotnetCraigslist
             return default;
         }
 
-        private Uri CreateRequestUri()
+        private Uri CreateRequestUrl()
         {
             var builder = new UriBuilder()
             {

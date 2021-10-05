@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
 
 namespace DotnetCraigslist
 {
     public class Posting
     {
-        internal Posting(PostingRequest request) => 
-            Request = request;
+        internal Posting(PostingRequest request, string id, Uri postingUrl, DateTime postedOn) => 
+            (Request, Id, PostingUrl, PostedOn) = (request, id, postingUrl, postedOn);
 
-        public PostingRequest Request { get; init; }
+        public PostingRequest Request { get; }
 
-        public string Id => Request.Id;
+        public string Id { get; }
 
-        public Uri PostingUri => Request.Uri;
+        public Uri PostingUrl { get; }
 
-        public DateTime Posted { get; init; }
+        public DateTime PostedOn { get; }
 
-        public DateTime? Updated { get; init; }
+        public DateTime? UpdatedOn { get; init; }
 
         public string? FullTitle { get; init; }
 
@@ -29,6 +29,6 @@ namespace DotnetCraigslist
 
         public GeoCoordinate? Location { get; init; }
 
-        public IEnumerable<string> AdditionalAttributes { get; init; } = new string[0];
+        public IEnumerable<string> AdditionalAttributes { get; init; } = Enumerable.Empty<string>();
     }
 }

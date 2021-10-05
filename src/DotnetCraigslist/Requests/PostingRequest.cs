@@ -13,7 +13,7 @@ namespace DotnetCraigslist
         public string Category { get; set; }
         public string Id { get; set; }
 
-        public Uri Uri => CreateRequestUri();
+        public Uri Url => CreateRequestUrl();
 
         public PostingRequest(string site, string category, string id)
             : this(site, default, category, id) { }
@@ -22,7 +22,7 @@ namespace DotnetCraigslist
             (Site, Area, Category, Id) = (site, area, category, id);
 
         public PostingRequest(SearchResult searchResult)
-            : this(searchResult.PostingUrl) { }
+            : this(searchResult.PostingUrl.ToString()) { }
 
         public PostingRequest(string url)
         {
@@ -49,7 +49,7 @@ namespace DotnetCraigslist
             Id = match.Groups[7].Value;
         }
 
-        private Uri CreateRequestUri()
+        private Uri CreateRequestUrl()
         {
             var builder = new UriBuilder()
             {

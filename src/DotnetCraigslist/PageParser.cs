@@ -33,7 +33,7 @@ namespace DotnetCraigslist
                 
             return new SearchResults(request)
             {
-                Next = next,
+                NextPageUrl = next,
                 Results = rows?.Select(r => ParseRow(r)).ToArray() ?? Enumerable.Empty<SearchResult>(),
             };
         }
@@ -47,6 +47,7 @@ namespace DotnetCraigslist
                 .SelectSingleNode("//p[@id='display-date']/time")
                 .Attributes["datetime"]
                 .Value;
+            var postedDT = DateTime.Parse(posted);
                 
             var updated = doc.DocumentNode
                 .SelectSingleNode("//div[contains(@class, 'postinginfos')]")
@@ -55,6 +56,7 @@ namespace DotnetCraigslist
                 ?.SelectSingleNode(".//time")
                 ?.Attributes["datetime"]
                 ?.Value;
+            var updatedDT = updated == default ? default(DateTime?) : DateTime.Parse(updated);
 
             var fullTitle = string.Join("", doc.DocumentNode
                 .SelectNodes("//span[contains(@class, 'postingtitletext')]//text()")
@@ -105,10 +107,9 @@ namespace DotnetCraigslist
                     .Select(t => t.Text)))
                 .ToHashSet();
 
-            return new Posting(request)
+            return new Posting(request, request.Id, request.Url, postedDT)
             {
-                Posted = DateTime.Parse(posted),
-                Updated = updated == default ? default(DateTime?) : DateTime.Parse(updated),
+                UpdatedOn = updatedDT,
                 FullTitle = fullTitle,
                 Title = title,
                 Price = price,
@@ -136,7 +137,11 @@ namespace DotnetCraigslist
             var price = row.SelectSingleNode(".//span[contains(@class, 'result-price')]")?.InnerText;
             var hood = row.SelectSingleNode(".//span[contains(@class, 'result-hood')]")?.InnerText?.Trim(' ', '(', ')');
 
-            return new SearchResult(id, url, dateTime, title, price, hood);
+            return new SearchResult(id, new Uri(url), dateTime, title)
+            {
+                Price = price,
+                Hood = hood,
+            };
         }
     }
 }

@@ -4,23 +4,20 @@ namespace DotnetCraigslist
 {
     public class SearchResult
     {
-        internal SearchResult(string id, string listingUrl, DateTime date, string title)
-            : this(id, listingUrl, date, title, default, default) { }
-
-        internal SearchResult(string id, string listingUrl, DateTime date, string title, string? price, string? hood) => 
-            (Id, PostingUrl, Date, Title, Price, Hood) = 
-            (id, listingUrl, date, title, price, hood);
+        internal SearchResult(string id, Uri postingUrl, DateTime date, string title)=> 
+            (Id, PostingUrl, Date, Title) = 
+            (id, postingUrl, date, title);
 
         public string Id { get; }
 
-        public string PostingUrl { get; }
+        public Uri PostingUrl { get; }
 
         public DateTime Date { get; }
 
         public string Title { get; }
 
-        public string? Price { get; }
+        public string? Price { get; init; }
 
-        public string? Hood { get; }
+        public string? Hood { get; init; }
     }
 }

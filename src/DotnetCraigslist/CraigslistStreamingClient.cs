@@ -44,8 +44,8 @@ namespace DotnetCraigslist
             SearchRequest request, 
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var previousResults = new FifoHashSet<string>(10);
-            var maxResults = 10;
+            var previousResults = new FifoHashSet<string>(5);
+            var maxResults = 5;
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -75,26 +75,26 @@ namespace DotnetCraigslist
 
         private async IAsyncEnumerable<SearchResult> GetNewSearchResults(
             SearchRequest request, 
-            Predicate<string> isSeenResult, 
+            Predicate<string> isEncounteredResult, 
             int maxResults,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var searchResults = await _client.SearchAsync(request, cancellationToken);
 
-            bool containsPreviousResult = false;
+            bool containsEncounteredResult = false;
 
             var results = searchResults.Results
                 .Take(maxResults)
-                .TakeWhile(r => !(containsPreviousResult = isSeenResult(r.Id)))
+                .TakeWhile(r => !(containsEncounteredResult = isEncounteredResult(r.Id)))
                 .Reverse()
                 .ToArray();
 
-            if (!containsPreviousResult && 
+            if (!containsEncounteredResult && 
                 maxResults - results.Length > 0 && 
-                searchResults.Next != default)
+                searchResults.NextPageUrl != default)
             {
-                var nextPageRequest = new SearchRequest(searchResults.Next);
-                var nextResults = GetNewSearchResults(nextPageRequest, isSeenResult, maxResults - results.Length, cancellationToken);
+                var nextPageRequest = new SearchRequest(searchResults.NextPageUrl);
+                var nextResults = GetNewSearchResults(nextPageRequest, isEncounteredResult, maxResults - results.Length, cancellationToken);
                 await foreach (var r in nextResults) yield return r;
             }
 
