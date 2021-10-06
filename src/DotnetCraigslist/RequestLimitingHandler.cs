@@ -8,8 +8,6 @@ namespace DotnetCraigslist
 {
     internal class RequestLimitingHandler : DelegatingHandler
     {
-        private static readonly TimeSpan ZERO = TimeSpan.FromSeconds(0);
-
         public TimeSpan RequestDelay { get; }
 
         private DateTime _lastRequest;
@@ -29,7 +27,7 @@ namespace DotnetCraigslist
                 await _semaphore.WaitAsync();
 
                 var wait = RequestDelay - (DateTime.UtcNow - _lastRequest);
-                wait = wait > ZERO ? wait : ZERO;
+                wait = wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
 
                 await Task.Delay(wait);
 
@@ -49,7 +47,7 @@ namespace DotnetCraigslist
                 _semaphore.Wait();
 
                 var wait = RequestDelay - (DateTime.UtcNow - _lastRequest);
-                wait = wait > ZERO ? wait : ZERO;
+                wait = wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
 
                 Thread.Sleep(wait);
 

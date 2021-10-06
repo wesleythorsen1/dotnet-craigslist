@@ -55,14 +55,10 @@ namespace DotnetCraigslist
         }
 
         public SearchRequest(string site, string category)
-            : this(site, default, category)
-        {
-        }
+            : this(site, default, category) { }
 
         public SearchRequest(string site, string? area, string category)
-            : this(site, area, category, new Dictionary<string, object>())
-        {
-        }
+            : this(site, area, category, new Dictionary<string, object>()) { }
 
         public SearchRequest(string site, string? area, string category, IEnumerable<KeyValuePair<string, object>> queryParameters)
         {
