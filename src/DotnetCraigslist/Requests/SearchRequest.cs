@@ -3,6 +3,7 @@ namespace DotnetCraigslist
     public partial class SearchRequest
     {
         private const string QP_SKIP = "s";
+        private const string QP_SORT = "sort";
         private const string QP_QUERY = "query";
         private const string QP_SRCHTYPE = "srchType";
         private const string QP_HASPIC = "hasPic";
@@ -12,15 +13,30 @@ namespace DotnetCraigslist
         private const string QP_SEARCHDISTANCE = "search_distance";
         private const string QP_POSTALCODE = "postal";
         
+        public enum SortOrder
+        {
+            Upcoming,
+            Newest,
+            PriceAscending,
+            PriceDescending,
+            Distance,
+        }
+
         public int Skip
         {
             get => GetParameter<int>(QP_SKIP);
             set => SetParameter(QP_SKIP, value);
         }
+        
+        public SortOrder? Sort
+        {
+            get => GetParameter<SortOrder?>(QP_SORT);
+            set => SetParameter(QP_SORT, value);
+        }
 
         public string? SearchText
         {
-            get => GetParameter<string>(QP_QUERY);
+            get => GetParameter<string?>(QP_QUERY);
             set => SetParameter(QP_QUERY, value);
         }
         
@@ -54,15 +70,15 @@ namespace DotnetCraigslist
             set => SetParameter(QP_SEARCHNEARBY, value);
         }
 
-        public float SearchDistance
+        public float? SearchDistance
         {
-            get => GetParameter<float>(QP_SEARCHDISTANCE);
+            get => GetParameter<float?>(QP_SEARCHDISTANCE);
             set => SetParameter(QP_SEARCHDISTANCE, value);
         }
 
         public string? PostalCode
         {
-            get => GetParameter<string>(QP_POSTALCODE);
+            get => GetParameter<string?>(QP_POSTALCODE);
             set => SetParameter(QP_POSTALCODE, value);
         }
     }

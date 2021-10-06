@@ -79,6 +79,8 @@ namespace DotnetCraigslist
             int maxResults,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
+            request.Sort = SearchRequest.SortOrder.Newest;
+
             var searchResults = await _client.SearchAsync(request, cancellationToken);
 
             bool containsEncounteredResult = false;

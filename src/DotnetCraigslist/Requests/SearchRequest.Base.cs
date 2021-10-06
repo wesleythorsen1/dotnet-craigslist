@@ -142,6 +142,18 @@ namespace DotnetCraigslist
             {
                 value = dt.ToString("yyyy-MM-dd");
             }
+            else if (value is SortOrder sortOrder)
+            {
+                value = value switch
+                {
+                    SortOrder.Upcoming => "upcoming",
+                    SortOrder.Newest => "date",
+                    SortOrder.PriceAscending => "priceasc",
+                    SortOrder.PriceDescending => "pricedsc",
+                    SortOrder.Distance => "dist",
+                    _ => throw new ArgumentException("Invalid enum value", nameof(sortOrder)),
+                };
+            }
             else if (value is Enum)
             {
                 value = (int)value;
