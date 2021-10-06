@@ -49,7 +49,7 @@ namespace DotnetCraigslist
 
         public DateTime? OnDate
         {
-            get => GetParameter<DateTime>(QP_ONDATE);
+            get => GetParameter<DateTime?>(QP_ONDATE);
             set => SetParameter(QP_ONDATE, value);
         }
 

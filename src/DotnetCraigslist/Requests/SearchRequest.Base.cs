@@ -55,14 +55,10 @@ namespace DotnetCraigslist
         }
 
         public SearchRequest(string site, string category)
-            : this(site, default, category)
-        {
-        }
+            : this(site, default, category) { }
 
         public SearchRequest(string site, string? area, string category)
-            : this(site, area, category, new Dictionary<string, object>())
-        {
-        }
+            : this(site, area, category, new Dictionary<string, object>()) { }
 
         public SearchRequest(string site, string? area, string category, IEnumerable<KeyValuePair<string, object>> queryParameters)
         {
@@ -145,6 +141,18 @@ namespace DotnetCraigslist
             else if (value is DateTime dt)
             {
                 value = dt.ToString("yyyy-MM-dd");
+            }
+            else if (value is SortOrder sortOrder)
+            {
+                value = value switch
+                {
+                    SortOrder.Upcoming => "upcoming",
+                    SortOrder.Newest => "date",
+                    SortOrder.PriceAscending => "priceasc",
+                    SortOrder.PriceDescending => "pricedsc",
+                    SortOrder.Distance => "dist",
+                    _ => throw new ArgumentException("Invalid enum value", nameof(sortOrder)),
+                };
             }
             else if (value is Enum)
             {

@@ -68,10 +68,8 @@ namespace DotnetCraigslist
                 maxResults = 3000;
 
                 var wait = FIVE_MINUTES - (DateTime.UtcNow - start);
-                if (wait > TimeSpan.Zero)
-                {
-                    await Task.Delay((int)wait.TotalMilliseconds, cancellationToken);
-                }
+                wait = wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
+                await Task.Delay(wait, cancellationToken);
             }
         }
 
@@ -81,6 +79,8 @@ namespace DotnetCraigslist
             int maxResults,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
+            request.Sort = SearchRequest.SortOrder.Newest;
+
             var searchResults = await _client.SearchAsync(request, cancellationToken);
 
             bool containsEncounteredResult = false;

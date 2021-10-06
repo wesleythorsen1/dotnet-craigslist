@@ -378,19 +378,19 @@ namespace DotnetCraigslist
 
         public int? MinPrice
         {
-            get => GetParameter<int>(QP_MINPRICE);
+            get => GetParameter<int?>(QP_MINPRICE);
             set => SetParameter(QP_MINPRICE, value);
         }
 
         public int? MaxPrice
         {
-            get => GetParameter<int>(QP_MAXPRICE);
+            get => GetParameter<int?>(QP_MAXPRICE);
             set => SetParameter(QP_MAXPRICE, value);
         }
 
         public string? MakeModel
         {
-            get => GetParameter<string>(QP_MAKEMODEL);
+            get => GetParameter<string?>(QP_MAKEMODEL);
             set => SetParameter(QP_MAKEMODEL, value);
         }
 
@@ -398,25 +398,25 @@ namespace DotnetCraigslist
 
         public int? MinModelYear
         {
-            get => GetParameter<int>(QP_MINMODELYEAR);
+            get => GetParameter<int?>(QP_MINMODELYEAR);
             set => SetParameter(QP_MINMODELYEAR, value);
         }
 
         public int? MaxModelYear
         {
-            get => GetParameter<int>(QP_MAXMODELYEAR);
+            get => GetParameter<int?>(QP_MAXMODELYEAR);
             set => SetParameter(QP_MAXMODELYEAR, value);
         }
 
         public int? MinOdometer
         {
-            get => GetParameter<int>(QP_MINODOMETER);
+            get => GetParameter<int?>(QP_MINODOMETER);
             set => SetParameter(QP_MINODOMETER, value);
         }
 
         public int? MaxOdometer
         {
-            get => GetParameter<int>(QP_MAXODOMETER);
+            get => GetParameter<int?>(QP_MAXODOMETER);
             set => SetParameter(QP_MAXODOMETER, value);
         }
 
