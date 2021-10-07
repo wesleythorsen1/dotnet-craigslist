@@ -12,6 +12,19 @@ namespace DotnetCraigslist
     {
         IAsyncEnumerable<Posting> StreamPostings(SearchRequest request, CancellationToken cancellationToken = default);
         IAsyncEnumerable<SearchResult> StreamSearchResults(SearchRequest request, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<SearchResult> TakeSearchResults(
+            SearchRequest request, 
+            int count, 
+            CancellationToken cancellationToken = default);
+        IAsyncEnumerable<SearchResult> TakeSearchResultsWhile(
+            SearchRequest request, 
+            Func<SearchResult, bool> predicate, 
+            int maxResults, 
+            CancellationToken cancellationToken = default);
+        IAsyncEnumerable<SearchResult> TakeSearchResultsWhile(
+            SearchRequest request, 
+            Func<SearchResult, bool> predicate, 
+            CancellationToken cancellationToken = default);
     }
 
     public class CraigslistStreamingClient : ICraigslistStreamingClient
@@ -53,13 +66,13 @@ namespace DotnetCraigslist
             {
                 var start = DateTime.UtcNow;
 
-                var results = GetNewSearchResults(
+                var results = TakeSearchResultsWhile(
                     request, 
-                    id => previousResults.Contains(id), 
+                    r => !previousResults.Contains(r.Id), 
                     maxResults, 
                     cancellationToken);
 
-                await foreach (var r in results)
+                await foreach (var r in results.Reverse())
                 {
                     previousResults.Add(r.Id);
                     yield return r;
@@ -73,34 +86,52 @@ namespace DotnetCraigslist
             }
         }
 
-        private async IAsyncEnumerable<SearchResult> GetNewSearchResults(
+        public IAsyncEnumerable<SearchResult> TakeSearchResults(
             SearchRequest request, 
-            Predicate<string> isEncounteredResult, 
-            int maxResults,
-            [EnumeratorCancellation] CancellationToken cancellationToken)
+            int count, 
+            CancellationToken cancellationToken = default)
         {
-            request.Sort = SearchRequest.SortOrder.Newest;
+            int results = 0;
+            return TakeSearchResultsWhile(
+                request, 
+                r => results++ < count,
+                cancellationToken);
+        }
 
+        public IAsyncEnumerable<SearchResult> TakeSearchResultsWhile(
+            SearchRequest request, 
+            Func<SearchResult, bool> predicate, 
+            int maxResults, 
+            CancellationToken cancellationToken = default)
+        {
+            int results = 0;
+            return TakeSearchResultsWhile(
+                request, 
+                r => predicate(r) && (results++ < maxResults),
+                cancellationToken);
+        }
+
+        public async IAsyncEnumerable<SearchResult> TakeSearchResultsWhile(
+            SearchRequest request, 
+            Func<SearchResult, bool> predicate, 
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
             var searchResults = await _client.SearchAsync(request, cancellationToken);
 
-            bool containsEncounteredResult = false;
+            bool shouldContinue = true;
 
             var results = searchResults.Results
-                .Take(maxResults)
-                .TakeWhile(r => !(containsEncounteredResult = isEncounteredResult(r.Id)))
-                .Reverse()
-                .ToArray();
+                .TakeWhile(r => (shouldContinue = predicate(r)));
 
-            if (!containsEncounteredResult && 
-                maxResults - results.Length > 0 && 
+            foreach (var r in results) yield return r;
+
+            if (shouldContinue && 
                 searchResults.NextPageUrl != default)
             {
                 var nextPageRequest = new SearchRequest(searchResults.NextPageUrl);
-                var nextResults = GetNewSearchResults(nextPageRequest, isEncounteredResult, maxResults - results.Length, cancellationToken);
+                var nextResults = TakeSearchResultsWhile(nextPageRequest, predicate, cancellationToken);
                 await foreach (var r in nextResults) yield return r;
             }
-
-            foreach (var r in results) yield return r;
         }
     }
 }

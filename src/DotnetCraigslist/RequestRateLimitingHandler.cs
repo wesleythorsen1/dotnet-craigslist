@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace DotnetCraigslist
 {
-    internal class RequestLimitingHandler : DelegatingHandler
+    internal class RequestRateLimitingHandler : DelegatingHandler
     {
         public TimeSpan RequestDelay { get; }
 
         private DateTime _lastRequest;
         private SemaphoreSlim _semaphore;
 
-        internal RequestLimitingHandler(TimeSpan requestDelay)
+        internal RequestRateLimitingHandler(TimeSpan requestDelay)
         {
             RequestDelay = requestDelay;
             _lastRequest = DateTime.MinValue;

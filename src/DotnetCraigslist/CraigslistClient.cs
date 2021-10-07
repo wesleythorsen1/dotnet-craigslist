@@ -6,9 +6,9 @@ namespace DotnetCraigslist
 {
     public interface ICraigslistClient
     {
-        SearchResults Search(SearchRequest request);
+        SearchResults Search(SearchRequest request, CancellationToken cancellationToken = default);
         Task<SearchResults> SearchAsync(SearchRequest request, CancellationToken cancellationToken = default);
-        Posting GetPosting(PostingRequest request);
+        Posting GetPosting(PostingRequest request, CancellationToken cancellationToken = default);
         Task<Posting> GetPostingAsync(PostingRequest request, CancellationToken cancellationToken = default);
     }
 
@@ -26,10 +26,10 @@ namespace DotnetCraigslist
         internal CraigslistClient(HttpClient httpClient, IPageParser pageParser)
             => (_httpClient, _pageParser) = (httpClient, pageParser);
 
-        public SearchResults Search(SearchRequest request)
+        public SearchResults Search(SearchRequest request, CancellationToken cancellationToken = default)
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
-            using var response = _httpClient.Send(req);
+            using var response = _httpClient.Send(req, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             using var content = response.Content.ReadAsStream();
@@ -48,10 +48,10 @@ namespace DotnetCraigslist
             return _pageParser.ParseSearchResults(request, content);
         }
 
-        public Posting GetPosting(PostingRequest request)
+        public Posting GetPosting(PostingRequest request, CancellationToken cancellationToken = default)
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
-            using var response = _httpClient.Send(req);
+            using var response = _httpClient.Send(req, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             using var content = response.Content.ReadAsStream();

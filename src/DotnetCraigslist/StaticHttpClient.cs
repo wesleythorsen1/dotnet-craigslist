@@ -11,7 +11,7 @@ namespace DotnetCraigslist
             {
                 var handler = new RequestRetryHandler(3)
                 {
-                    InnerHandler = new RequestLimitingHandler(TimeSpan.FromSeconds(5))
+                    InnerHandler = new RequestRateLimitingHandler(TimeSpan.FromSeconds(5))
                     {
                         InnerHandler = new HttpClientHandler(),
                     }

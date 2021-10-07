@@ -114,15 +114,16 @@ await foreach(var posting in client.StreamPostings(request))
 
 Notes:
 
-* The `CraigslistStreamingClient` will refresh the search results every 5 minutes. However, Craigslist only indexes new postings every 15 minutes. In general you will only see new results every 15 minutes. Be patient.
+* The `IAsyncEnumerable` returned by `.StreamSearchResults(...)` and `.StreamPostings(...)` will never end, unless the cancelationToken is requested or there is a fatal error. You should not use any linq methods that need to perform a full enumeration on these methods (`.Count()`, `.ToList()`, `.Reverse()` etc.).
+* `.StreamSearchResults(...)` and `.StreamPostings(...)` will refresh the search results every 5 minutes. However, Craigslist only indexes new postings every 15 minutes. In general you will only see new results every 15 minutes. Be patient.
 * Items returned in stream will be in the reverse order listed on search page. (oldest will be returned first)
-* When `.StreamSearchResults(...)` or `.StreamPostings(...)` is initially called, it will return the first 5 search results, even if they are not new. This allows the client to determine which subsequent results are new. If you wish to see ONLY new results after the stream is started, ignore the first 5 results returned.
+* When `.StreamSearchResults(...)` or `.StreamPostings(...)` is initially called, it will return the first 5 search results, even if they are not new. This allows the client to determine which subsequent results are new. If you wish to see ONLY new results after the stream is started, skip the first 5 results returned.
 * If `.StreamPostings(...)` is used, an additional request per new search result will be made in order to get the full posting details. Be aware that this could cause a large number of requests, resulting in a Craigslist ban, or the stream falling behind. To avoid this, try narrowing down the initial search request to limit the number of results returned.
 
 Limitations
 -----------
 
-Sending a large number of / frequent requests to Craigslist will result in a IP ban. To avoid this, the default constructors of the `CraigslistClient` and `CraigslistStreamingClient` use a request time limiter, and will force all requests to wait 5 seconds from the previous request before sending. This helps ensure that out-of-the-box users do not unintentionally get banned. If you wish to change this behavior, provide your own `HttpClient` to the constructors of the `CraigslistClient` or `CraigslistStreamingClient` classes.
+Sending a large number of / frequent requests to Craigslist will result in a IP ban. To avoid this, the default constructors of the `CraigslistClient` and `CraigslistStreamingClient` inject a request rate limiter, and will force all requests to wait 5 seconds from the previous request before sending. This helps ensure that out-of-the-box users do not unintentionally get banned. If you wish to change this behavior, provide your own `HttpClient` to the constructors of the `CraigslistClient` or `CraigslistStreamingClient` classes.
 
 Other Examples
 --------
@@ -168,7 +169,7 @@ Classes
   * For continuously streaming new search results or postings
 * Requests
   * `SearchRequest`
-    * A base search request type. Can be used instread of the derived classes. Use these to "search" Craigslist.
+    * A base search request type. Can be used instead of the derived classes. Use these to "search" Craigslist.
     * `SearchCommunityRequest`
     * `SearchEventsRequest`
     * `SearchForSaleRequest`
