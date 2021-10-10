@@ -5,9 +5,8 @@ namespace DotnetCraigslist
 {
     internal static class StaticHttpClient
     {
-        static StaticHttpClient()
-        {
-            _client = new Lazy<HttpClient>(() => 
+        private static Lazy<HttpClient> _client = 
+            new Lazy<HttpClient>(() => 
             {
                 var handler = new RequestRetryHandler(3)
                 {
@@ -20,9 +19,6 @@ namespace DotnetCraigslist
                 client.DefaultRequestHeaders.ConnectionClose = true;
                 return client;
             });
-        }
-
-        private static Lazy<HttpClient> _client;
         
         internal static HttpClient DefaultClient => _client.Value;
     }

@@ -26,12 +26,12 @@ namespace DotnetCraigslist
 
             var match = _urlRegex.Match(url);
 
-            if (match.Success == false)
+            if (!match.Success)
                 throw new ArgumentException("Unable to parse url.", nameof(url));
 
             Site = match.Groups[1].Value;
 
-            if (match.Groups[4].Success == false)
+            if (!match.Groups[4].Success)
             {
                 Category = match.Groups[3].Value;
             }
@@ -132,7 +132,7 @@ namespace DotnetCraigslist
 
         }
 
-        private string EscapeQpValue(object value)
+        private static string EscapeQpValue(object value)
         {
             if (value is bool)
             {
@@ -144,14 +144,14 @@ namespace DotnetCraigslist
             }
             else if (value is SortOrder sortOrder)
             {
-                value = value switch
+                value = sortOrder switch
                 {
                     SortOrder.Upcoming => "upcoming",
                     SortOrder.Newest => "date",
                     SortOrder.PriceAscending => "priceasc",
                     SortOrder.PriceDescending => "pricedsc",
                     SortOrder.Distance => "dist",
-                    _ => throw new ArgumentException("Invalid enum value", nameof(sortOrder)),
+                    //_ => throw new ArgumentException("Invalid enum value", nameof(value)),
                 };
             }
             else if (value is Enum)

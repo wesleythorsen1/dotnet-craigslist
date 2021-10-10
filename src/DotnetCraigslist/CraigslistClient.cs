@@ -32,7 +32,7 @@ namespace DotnetCraigslist
             using var response = _httpClient.Send(req, cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            using var content = response.Content.ReadAsStream();
+            using var content = response.Content.ReadAsStream(cancellationToken);
 
             return _pageParser.ParseSearchResults(request, content);
         }
@@ -54,7 +54,7 @@ namespace DotnetCraigslist
             using var response = _httpClient.Send(req, cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            using var content = response.Content.ReadAsStream();
+            using var content = response.Content.ReadAsStream(cancellationToken);
 
             return _pageParser.ParsePosting(request, content);
         }

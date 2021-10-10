@@ -119,7 +119,7 @@ namespace DotnetCraigslist
             };
         }
 
-        private SearchResult ParseRow(HtmlNode row)
+        private static SearchResult ParseRow(HtmlNode row)
         {
             var id = row.Attributes["data-pid"].Value;
             var link = row.SelectSingleNode(".//a[contains(@class, 'hdrlnk')]");

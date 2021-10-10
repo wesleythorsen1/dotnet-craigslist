@@ -31,12 +31,12 @@ namespace DotnetCraigslist
 
             var match = _urlRegex.Match(url);
 
-            if (match.Success == false)
+            if (!match.Success)
                 throw new ArgumentException("Unable to parse url.", nameof(url));
 
             Site = match.Groups[1].Value;
 
-            if (match.Groups[3].Success == false)
+            if (!match.Groups[3].Success)
             {
                 Category = match.Groups[2].Value;
             }
