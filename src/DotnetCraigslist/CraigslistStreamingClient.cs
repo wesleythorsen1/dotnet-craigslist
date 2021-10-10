@@ -62,8 +62,10 @@ namespace DotnetCraigslist
             var previousResults = new FifoHashSet<string>(5);
             var maxResults = 5;
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (true)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var start = DateTime.UtcNow;
 
                 var results = TakeSearchResultsWhile(

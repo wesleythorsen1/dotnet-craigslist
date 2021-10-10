@@ -27,7 +27,7 @@ namespace DotnetCraigslist
                 }
                 catch(Exception) when (shouldRetry())
                 {
-
+                    // only catch when there are remaining retries
                 }
             }
 
@@ -46,7 +46,7 @@ namespace DotnetCraigslist
                 }
                 catch(Exception) when (shouldRetry())
                 {
-                    
+                    // only catch when there are remaining retries
                 }
             }
 

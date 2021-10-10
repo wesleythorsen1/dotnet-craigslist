@@ -11,7 +11,7 @@ namespace DotnetCraigslist
         public TimeSpan RequestDelay { get; }
 
         private DateTime _lastRequest;
-        private SemaphoreSlim _semaphore;
+        private readonly SemaphoreSlim _semaphore;
 
         internal RequestRateLimitingHandler(TimeSpan requestDelay)
         {
@@ -24,12 +24,12 @@ namespace DotnetCraigslist
         {
             try
             {
-                await _semaphore.WaitAsync();
+                await _semaphore.WaitAsync(cancellationToken);
 
                 var wait = RequestDelay - (DateTime.UtcNow - _lastRequest);
                 wait = wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
 
-                await Task.Delay(wait);
+                await Task.Delay(wait, cancellationToken);
 
                 return await base.SendAsync(request, cancellationToken);
             }
@@ -44,7 +44,7 @@ namespace DotnetCraigslist
         {
             try
             {
-                _semaphore.Wait();
+                _semaphore.Wait(cancellationToken);
 
                 var wait = RequestDelay - (DateTime.UtcNow - _lastRequest);
                 wait = wait > TimeSpan.Zero ? wait : TimeSpan.Zero;

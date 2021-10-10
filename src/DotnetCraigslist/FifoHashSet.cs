@@ -5,10 +5,10 @@ namespace DotnetCraigslist
 {
     internal class FifoHashSet<T>
     {
-        private int _capacity;
+        private readonly int _capacity;
+        private readonly T[] _queue;
+        private readonly HashSet<T> _lookup;
         private int _i = 0;
-        private T[] _queue;
-        private HashSet<T> _lookup;
 
         public FifoHashSet(int capacity)
         {
