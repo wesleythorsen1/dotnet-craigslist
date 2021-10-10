@@ -2,6 +2,7 @@ dotnet-craigslist
 =================
 
 [![](https://img.shields.io/github/workflow/status/wesleythorsen1/dotnet-craigslist/Build%20and%20Publish)](https://github.com/wesleythorsen1/dotnet-craigslist/actions/workflows/build.yml)
+[![](https://sonarcloud.io/api/project_badges/measure?project=wesleythorsen1_dotnet-craigslist&metric=alert_status)](https://sonarcloud.io/dashboard?id=wesleythorsen1_dotnet-craigslist)
 [![](https://img.shields.io/nuget/dt/DotnetCraigslist)](https://www.nuget.org/packages/DotnetCraigslist/)
 [![](https://img.shields.io/nuget/v/DotnetCraigslist)](https://www.nuget.org/packages/DotnetCraigslist/)
 
