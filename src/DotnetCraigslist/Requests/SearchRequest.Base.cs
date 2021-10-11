@@ -151,7 +151,7 @@ namespace DotnetCraigslist
                     SortOrder.PriceAscending => "priceasc",
                     SortOrder.PriceDescending => "pricedsc",
                     SortOrder.Distance => "dist",
-                    //_ => throw new ArgumentException("Invalid enum value", nameof(value)),
+                    _ => throw new ArgumentException("Invalid enum value", nameof(value)),
                 };
             }
             else if (value is Enum)

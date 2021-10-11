@@ -62,10 +62,8 @@ namespace DotnetCraigslist
             var previousResults = new FifoHashSet<string>(5);
             var maxResults = 5;
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 var start = DateTime.UtcNow;
 
                 var results = TakeSearchResultsWhile(
@@ -86,6 +84,8 @@ namespace DotnetCraigslist
                 wait = wait > TimeSpan.Zero ? wait : TimeSpan.Zero;
                 await Task.Delay(wait, cancellationToken);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         public IAsyncEnumerable<SearchResult> TakeSearchResults(
