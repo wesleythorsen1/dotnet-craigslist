@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace DotnetCraigslist
 {
-    internal class FifoHashSet<T>
+    internal class CircularSet<T>
     {
         private readonly int _capacity;
         private readonly T[] _queue;
         private readonly HashSet<T> _lookup;
         private int _i = 0;
 
-        public FifoHashSet(int capacity)
+        public CircularSet(int capacity)
         {
             if (capacity < 1)
                 throw new ArgumentException("Value must be greater than 0.", nameof(capacity));

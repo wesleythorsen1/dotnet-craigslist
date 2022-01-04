@@ -59,7 +59,7 @@ namespace DotnetCraigslist
             SearchRequest request, 
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var previousResults = new FifoHashSet<string>(5);
+            var previousResults = new CircularSet<string>(5);
             var maxResults = 5;
 
             while (!cancellationToken.IsCancellationRequested)
