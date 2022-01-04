@@ -15,7 +15,7 @@ Disclaimer
 
 * I don't work for or have any affiliation with Craigslist.
 * This module was implemented for educational purposes. It should not be used for crawling or downloading data from Craigslist.
-* This project was inspired by juliomalegria's [python-craigslist](https://github.com/juliomalegria/python-craigslist) project, kudos for the excellent python client and reference for this project.
+* This project was inspired by juliomalegria's [python-craigslist](https://github.com/juliomalegria/python-craigslist) project, kudos for the excellent python client and inspiration for this project.
 
 Installation
 ------------
@@ -25,68 +25,36 @@ Installation
 Quick Start
 -----------
 
-Example `Program.cs`:
+Search Craigslist:
 
 ```C#
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using DotnetCraigslist;
 
 var client = new CraigslistClient();
 
-// Create search request
-var request = new SearchHousingRequest("seattle", SearchHousingRequest.Categories.ApartmentsHousingForRent)
-{
-    MaxPrice = 1500,
-    MinBedrooms = 1,
-    ParkingOptions = new[]
+var request = new SearchHousingRequest(
+    "seattle", 
+    SearchHousingRequest.Categories.ApartmentsHousingForRent)
     {
-        SearchHousingRequest.Parking.Carport,
-        SearchHousingRequest.Parking.AttachedGarage,
-    },
-    // "Miles From Location":
-    PostalCode = "98101",
-    SearchDistance = 3.5f,
-};
+        MaxPrice = 1500,
+        MinBedrooms = 1
+    };
 
-// Send search request
 var searchResults = await client.SearchAsync(request);
-
-// Print search results
-foreach (var result in searchResults.Results)
-{
-    Console.WriteLine($"{result.Date.ToString("T"),-13}{result.Price,-9}{result.Title,-27}");
-}
-
-// Get the posting details of the first 5 results
-foreach (var searchResult in searchResults.Results.Take(5))
-{
-    // Create a posting request from the search result
-    var postingRequest = new PostingRequest(searchResult);
-
-    // Send posting request
-    var posting = await client.GetPostingAsync(postingRequest);
-
-    // Print the posting details
-    Console.WriteLine($@"
-Url: {posting.PostingUrl}
-Id: {posting.Id}
-PostedOn: {posting.PostedOn.ToString("O")}
-UpdatedOn: {posting.UpdatedOn?.ToString("O")}
-Price: {posting.Price}
-Title: {posting.Title}
-Location: ({posting.Location?.Latitude}, {posting.Location?.Longitude})
-Additional Attributes: {string.Join(", ", posting.AdditionalAttributes)}
-Description:
-{posting.Description}
-");
-}
 ```
-The above code demonstrates how to:
+Get Posting:
 
-1. Create and send a search request (equivalent of searching Craigslist)
-2. Creating a posting request from an item in the seach results, and sending the posting request (equivalent of clicking an item in the search results and viewing the posting on Craigslist)
+```C#
+using DotnetCraigslist;
+
+var postingRequest = new PostingRequest(
+    "seattle", 
+    SearchHousingRequest.Categories.ApartmentsHousingForRent,
+    "posting_id_here");
+
+var posting = await client.GetPostingAsync(postingRequest);
+```
+Posting IDs can be found in the `searchResults` object, or in a posting's URL if viewing with a browser. 
 
 Streaming
 ---------
@@ -97,27 +65,28 @@ The `CraigslistStreamingClient` can be used to continuously stream new search re
 * `.StreamPostings(...)` will do the same, however it will perform an additional request per new search result to get the posting's full details.
 
 ```C#
-using System;
 using DotnetCraigslist;
 
 var client = new CraigslistStreamingClient();
 
-var request = new SearchForSaleRequest("losangeles", SearchForSaleRequest.Categories.Electronics)
-{
-    SearchText = "graphics card",
-};
+var request = new SearchForSaleRequest(
+    "losangeles", 
+    SearchForSaleRequest.Categories.Electronics)
+    {
+        SearchText = "graphics card",
+    };
 
 await foreach(var posting in client.StreamPostings(request))
 {
-    Console.WriteLine($"{posting.PostedOn.ToString("T"),-12}{posting.Price,-9}{posting.Title,-100} Attributes: {string.Join(", ", posting.AdditionalAttributes),-140}");
+    // process posting...
 }
 ```
 
-Notes:
+Notes on streaming methods:
 
-* The `IAsyncEnumerable` returned by `.StreamSearchResults(...)` and `.StreamPostings(...)` will never end, unless the cancelationToken is requested or there is a fatal error. You should not use any linq methods that need to perform a full enumeration on these methods (`.Count()`, `.ToList()`, `.Reverse()` etc.).
+* The `IAsyncEnumerable` returned by `.StreamSearchResults(...)` and `.StreamPostings(...)` will never end, unless the cancelationToken is requested or there is a fatal error. You should not use any LINQ methods that need to perform a full enumeration on these methods (`.Count()`, `.ToList()`, `.Reverse()` etc.).
 * `.StreamSearchResults(...)` and `.StreamPostings(...)` will refresh the search results every 5 minutes. However, Craigslist only indexes new postings every 15 minutes. In general you will only see new results every 15 minutes. Be patient.
-* Items returned in stream will be in the reverse order listed on search page. (oldest will be returned first)
+* Items returned in stream will be in the reverse order listed on search page. (returned in chronological order, oldest to newest)
 * When `.StreamSearchResults(...)` or `.StreamPostings(...)` is initially called, it will return the first 5 search results, even if they are not new. This allows the client to determine which subsequent results are new. If you wish to see ONLY new results after the stream is started, skip the first 5 results returned.
 * If `.StreamPostings(...)` is used, an additional request per new search result will be made in order to get the full posting details. Be aware that this could cause a large number of requests, resulting in a Craigslist ban, or the stream falling behind. To avoid this, try narrowing down the initial search request to limit the number of results returned.
 
