@@ -129,37 +129,40 @@ namespace DotnetCraigslist
             }
 
             return string.Join('&', parts);
-
         }
 
-        private static string EscapeQpValue(object value)
+        private string EscapeQpValue(object value)
         {
+            string str;
             if (value is bool)
             {
-                value = (bool)value ? "1" : "0";
+                str = (bool)value ? "1" : "0";
             }
             else if (value is DateTime dt)
             {
-                value = dt.ToString("yyyy-MM-dd");
+                str = dt.ToString("yyyy-MM-dd");
             }
-            else if (value is SortOrder sortOrder)
+            else if (value is Enum enumValue)
             {
-                value = sortOrder switch
-                {
-                    SortOrder.Upcoming => "upcoming",
-                    SortOrder.Newest => "date",
-                    SortOrder.PriceAscending => "priceasc",
-                    SortOrder.PriceDescending => "pricedsc",
-                    SortOrder.Distance => "dist",
-                    _ => throw new ArgumentException("Invalid enum value", nameof(value)),
-                };
+                str = GetEnumQueryStringValue(enumValue) ?? ((int)value).ToString();
             }
-            else if (value is Enum)
+            else
             {
-                value = (int)value;
+                str = value?.ToString() ?? "";
             }
-            var str = value.ToString();
-            return Uri.EscapeUriString(str!);
+            return Uri.EscapeUriString(str);
+        }
+
+        private string? GetEnumQueryStringValue(Enum value)
+        {
+            var enumType = value.GetType();
+            var name = Enum.GetName(enumType, value);
+            var strValue = enumType.GetField(name!)?
+                .GetCustomAttributes(false)
+                .OfType<QueryStringValueAttribute>()
+                .SingleOrDefault()?
+                .Value;
+            return strValue;
         }
     }
 }

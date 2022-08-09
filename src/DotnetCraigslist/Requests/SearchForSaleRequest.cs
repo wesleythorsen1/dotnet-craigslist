@@ -4,6 +4,7 @@ namespace DotnetCraigslist
 {
     public class SearchForSaleRequest : SearchRequest
     {
+        private const string QP_PURVEYOR = "purveyor";
         private const string QP_MINPRICE = "min_price";
         private const string QP_MAXPRICE = "max_price";
         private const string QP_MAKEMODEL = "auto_make_model";
@@ -64,17 +65,11 @@ namespace DotnetCraigslist
             public const string Barter = "bar";
             public const string BicycleParts = "bip";
             public const string Bicycles = "bia";
-            public const string BicyclesByOwner = "bik";
-            public const string BicyclesByDealer = "bid";
             public const string BoatPartsAndAccessories = "bpa";
             public const string Boats = "boo";
-            public const string BoatsByOwner = "boa";
-            public const string BoatsByDealer = "bod";
             public const string BooksAndMagazines = "bka";
             public const string Business = "bfa";
             public const string CarsAndTrucks = "cta";
-            public const string CarsAndTrucksByOwner = "cto";
-            public const string CarsAndTrucksByDealer = "ctd";
             public const string CdsDvdsVhs = "ema";
             public const string CellPhones = "moa";
             public const string ClothingAndAccessories = "cla";
@@ -105,12 +100,24 @@ namespace DotnetCraigslist
             public const string VideoGaming = "vga";
             public const string Wanted = "waa";
         }
-        
+
         public SearchForSaleRequest(string site) : base(site, SearchForSaleRequest.Categories.All) {}
         public SearchForSaleRequest(string site, string category) : base(site, category) {}
         public SearchForSaleRequest(string site, string? area, string category) : base(site, area, category) {}
         internal SearchForSaleRequest(string site, string? area, string category, IDictionary<string, object> parameterStore) : base(site, area, category, parameterStore) {}
 
+        public enum Purveyors
+        {
+            [QueryStringValue("all")]
+            All = 0,
+
+            [QueryStringValue("owner")]
+            Owner,
+
+            [QueryStringValue("dealer")]
+            Dealer,
+        }
+        
         public enum Condition
         {
             New = 10,
@@ -403,6 +410,12 @@ namespace DotnetCraigslist
             한국말 = 19,
             Pусский = 20,
             TiếngViệt = 21,
+        }
+
+        public Purveyors Purveyor
+        {
+            get => GetParameter<Purveyors>(QP_PURVEYOR);
+            set => SetParameter(QP_PURVEYOR, value);
         }
 
         public int? MinPrice
