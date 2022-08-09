@@ -12,13 +12,25 @@ namespace DotnetCraigslist
         private const string QP_SEARCHNEARBY = "searchNearby";
         private const string QP_SEARCHDISTANCE = "search_distance";
         private const string QP_POSTALCODE = "postal";
-        
+
         public enum SortOrder
         {
+            [QueryStringValue("upcoming")]
             Upcoming,
+
+            [QueryStringValue("date")]
             Newest,
+
+            [QueryStringValue("dateoldest")]
+            Oldest,
+
+            [QueryStringValue("priceasc")]
             PriceAscending,
+
+            [QueryStringValue("pricedsc")]
             PriceDescending,
+
+            [QueryStringValue("dist")]
             Distance,
         }
 
