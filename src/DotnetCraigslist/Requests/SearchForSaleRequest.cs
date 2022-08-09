@@ -40,6 +40,12 @@ namespace DotnetCraigslist
 #region rvs
         private const string QP_RVTYPE = "rv_type";
 #endregion
+#region motorcycles
+        private const string QP_MOTORCYCLESTREETLEGAL = "motorcycle_street_legal";
+        private const string QP_MOTORCYCLEMINDISPLACEMENT = "min_engine_displacement_cc";
+        private const string QP_MOTORCYCLEMAXDISPLACEMENT = "max_engine_displacement_cc";
+        private const string QP_MOTORCYCLETYPE = "motorcycle_type";
+#endregion
         private const string QP_CRYPTOCURRENCYOK = "crypto_currency_ok";
         private const string QP_DELIVERYAVAILABLE = "delivery_available";
         private const string QP_LANGUAGE = "language";
@@ -351,6 +357,29 @@ namespace DotnetCraigslist
 
 #endregion
 
+#region motorcycles
+
+        public enum MotorcycleType
+        {
+            Bobber = 1,
+            CafeRace = 2,
+            Chopper = 3,
+            Cruiser = 4,
+            Dirtbike = 5,
+            DualSport = 6,
+            Moped = 7,
+            Scooter = 8,
+            SportBike = 9,
+            SportTouring = 10,
+            Standard = 11,
+            Street = 12,
+            Touring = 13,
+            Trike = 14,
+            Other = 15
+        }
+
+#endregion
+
         public enum Language
         {
             Afrikaans = 1,
@@ -548,6 +577,34 @@ namespace DotnetCraigslist
         {
             get => GetParameter<IEnumerable<RvType>>(QP_RVTYPE);
             set => SetParameter(QP_RVTYPE, value);
+        }
+
+#endregion
+
+#region motorcycles
+
+        public bool StreetLegal
+        {
+            get => GetParameter<bool>(QP_MOTORCYCLESTREETLEGAL);
+            set => SetParameter(QP_MOTORCYCLESTREETLEGAL, value);
+        }
+
+        public int? MinEngineDisplacement
+        {
+            get => GetParameter<int?>(QP_MOTORCYCLEMINDISPLACEMENT);
+            set => SetParameter(QP_MOTORCYCLEMINDISPLACEMENT, value);
+        }
+
+        public int? MaxEngineDisplacement
+        {
+            get => GetParameter<int?>(QP_MOTORCYCLEMAXDISPLACEMENT);
+            set => SetParameter(QP_MOTORCYCLEMAXDISPLACEMENT, value);
+        }
+
+        public IEnumerable<MotorcycleType>? MotorcycleTypes
+        {
+            get => GetParameter<IEnumerable<MotorcycleType>>(QP_MOTORCYCLETYPE);
+            set => SetParameter(QP_MOTORCYCLETYPE, value);
         }
 
 #endregion
